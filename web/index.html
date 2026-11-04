@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Astro Oracle · Your personal sky</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header><a class="brand" href="./">✧ ASTRO ORACLE</a><span>YOUR PERSONAL SKY</span></header>
+  <main>
+    <section class="intro"><p class="eyebrow">A LITTLE PERSPECTIVE FROM THE COSMOS</p>
+      <h1>Your chart.<br>Your changing sky.</h1>
+      <p class="lead">Discover when the planets form aspects to your natal placements. Calculate here, or bring a calendar you already have.</p>
+      <p class="privacy">✧ Birth details and uploaded calendars stay in this browser. Nothing is submitted to a server.</p>
+    </section>
+    <section class="panel" aria-labelledby="calculate-title">
+      <div class="section-heading"><span class="step">01</span><div><p class="eyebrow">START WITH YOUR STARS</p><h2 id="calculate-title">Calculate my transits</h2></div></div>
+      <form id="calculate-form">
+        <label>Birth date and time, including UTC offset
+          <input id="birth" required type="text" placeholder="1990-06-15T14:30:00-04:00" aria-describedby="birth-help">
+        </label>
+        <p class="help" id="birth-help">Use YYYY-MM-DDTHH:MM:SS±HH:MM. Enter the offset that applied at your birthplace on your birth date, or use Z for UTC. The calculator does not guess historical daylight saving time.</p>
+        <div class="fields"><label>Transit month (UTC)<input id="month" type="month" required min="1900-01" max="2100-12"></label>
+          <label>Display timezone<input id="timezone" required value="UTC" placeholder="America/New_York"></label></div>
+        <p class="help">Tropical geocentric longitudes; ten planets, five major aspects. Birthplace is not needed for this planetary-only calculation. Ascendant, MC, houses, daily ranking, and AI fortunes are not included yet.</p>
+        <button id="calculate" class="primary" type="submit">Calculate my transits <span>↗</span></button>
+      </form>
+      <details><summary>How the calculation works</summary><p>Natal planetary positions are calculated at your birth instant. The moving planets are scanned hourly for conjunctions, sextiles, squares, trines, and oppositions to those fixed positions, then crossings are refined to approximately one second. Events are selected by UTC month and displayed in your chosen timezone. This is a numerical crossing search, not a certified exhaustive ephemeris: very close station/tangent contacts can be missed. Dates between 1900 and 2100 are supported by this interface.</p></details>
+    </section>
+    <section class="panel alternative" aria-labelledby="import-title">
+      <div class="section-heading"><span class="step">02</span><div><p class="eyebrow">ALREADY HAVE YOUR CHART?</p><h2 id="import-title">Use Astro-Seek instead</h2></div></div>
+      <p>Open Astro-Seek to prepare your personal transit calendar, then upload its ICS file here. You can also preview an existing Astro Oracle calendar.</p>
+      <div class="actions"><a class="secondary" href="https://www.astro-seek.com/" target="_blank" rel="noopener noreferrer">Open Astro-Seek ↗</a><label class="secondary upload">Import .ics<input id="import" type="file" accept=".ics,text/calendar"></label></div>
+      <p class="help">This is an external link and file-import workflow, not an account connection or automatic sync. Imported text is displayed as supplied, without astronomical verification.</p>
+    </section>
+    <section id="results" class="panel" aria-labelledby="results-title" hidden>
+      <div class="result-heading"><h2 id="results-title">Your transit calendar</h2><button id="download" class="secondary" hidden>Download transit ICS</button></div>
+      <p id="result-note" class="help"></p><div id="entries"></div>
+    </section>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+  <footer>✧ Astrology as reflection, not a prediction.<br>Calculated with the open-source <a href="https://github.com/cosinekitty/astronomy">Astronomy Engine</a>. AI fortunes and payment access are separate services still to come.</footer>
+  <script src="core.js"></script><script src="app.js"></script>
+</body>
+</html>

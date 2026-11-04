@@ -63,6 +63,21 @@ chart-emphasis definitions, constant exactness, or tie-breaking. The earlier
 three-feature formula remains a competing proposal until a score specification
 is selected. Neither formula establishes predictive accuracy.
 
+## Later user direction: built-in calculation and GitHub Pages
+
+On 2026-11-04, the user requested built-in transit calculation so Astro-Seek upload
+is optional, plus a secondary Astro-Seek action. This supersedes deferring all
+automatic planetary natal calculation: the initial browser calculator derives
+natal planetary positions from an explicit birth instant. Full birthplace/house
+calculation remains unfinished. Both input paths should eventually produce the
+same validated candidate schema for the canonical pipeline.
+
+The supplied November ICS is a completed output reference. It does not replace
+the need for a raw Astro-Seek fixture. See the [calculator implementation and
+hosting notes](ASTRO-ORACLE-github-pages.md). Pages hosts the free static calculator;
+commercial services, secret keys, AI generation, and payment verification require
+appropriate separate infrastructure.
+
 Keep astronomical geometry, houses, scoring, assignment, Sabian indexing, lucky
 numbers, week grouping, and entitlement date arithmetic deterministic. AI writes
 interpretations and fortunes and may judge symbolic favorites. AI editorial

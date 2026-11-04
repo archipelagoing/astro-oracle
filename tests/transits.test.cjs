@@ -1,0 +1,48 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const path=require('node:path');
+const core=require('../web/core.js');
+assert.equal(core.signed(359-1),-2);
+assert.equal(core.signed(1-359),2);
+assert.equal(core.validBirth('2000-02-29T12:00:00Z'),true);
+assert.equal(core.validBirth('2001-02-29T12:00:00Z'),false);
+assert.equal(core.validBirth('1990-06-15T14:30:00'),false);
+assert.equal(core.validBirth('1990-06-15T14:30:00+14:30'),false);
+const sample=core.parseICS(fs.readFileSync('november_2026_oracle_final_revised.ics','utf8'));
+assert.equal(sample.length,30);
+assert.ok(sample[0].DESCRIPTION.includes('A. FORTUNE\n'));
+assert.ok(sample[0].DESCRIPTION.includes('B. MEANING'));
+const description='Unicode ✧ ♆, semicolon; and slash \\ plus\n'+'é'.repeat(150);
+const ics=core.exportICS([{id:'test',at:Date.UTC(2026,10,4,12),title:'Test, transit',description}],new Date('2026-11-04T00:00:00Z'));
+assert.ok(ics.endsWith('\r\n'));
+for(const line of ics.split('\r\n'))assert.ok(Buffer.byteLength(line)<=75);
+const roundtrip=core.parseICS(ics)[0];
+assert.equal(roundtrip.DESCRIPTION,description);
+assert.equal(roundtrip.SUMMARY,'Test, transit');
+assert.equal(roundtrip.DTSTART,'20261104T120000Z');
+const messages=[];
+const context=vm.createContext({Date,Math,console,TextEncoder,postMessage:m=>messages.push(m)});
+context.self=context;
+context.importScripts=(...names)=>names.forEach(name=>vm.runInContext(fs.readFileSync(path.join('web',name),'utf8'),context));
+vm.runInContext(fs.readFileSync('web/transits-worker.js','utf8'),context);
+context.self.onmessage({data:{birth:'1990-06-15T14:30:00-04:00',month:'2026-11'}});
+const result=messages.find(m=>m.hits);
+assert.ok(result,JSON.stringify(messages));
+assert.ok(result.hits.length>100);
+const seen=new Set();
+for(const hit of result.hits){
+  assert.ok(hit.at>=Date.parse('2026-11-01T00:00:00Z')&&hit.at<Date.parse('2026-12-01T00:00:00Z'));
+  const distance=Math.abs(core.signed(hit.longitude-hit.natalLongitude));
+  assert.ok(Math.abs(distance-hit.angle)<0.001,JSON.stringify(hit));
+  const key=[hit.moving,hit.target,hit.aspect,Math.round(hit.at/1000)].join('|');
+  assert.ok(!seen.has(key));seen.add(key);
+}
+// Same seasonal Sun return should exist near the birth month, independent of rank rules.
+messages.length=0;
+context.self.onmessage({data:{birth:'1990-06-15T14:30:00-04:00',month:'2026-06'}});
+const june=messages.find(m=>m.hits);
+const solarReturn=june.hits.find(h=>h.moving==='Sun'&&h.target==='Sun'&&h.angle===0);
+assert.ok(solarReturn);
+assert.ok(new Date(solarReturn.at).getUTCDate()>=14&&new Date(solarReturn.at).getUTCDate()<=17);
+console.log(`Passed ICS parsing/UTF-8 round trip, angular wraparound, ${result.hits.length} November crossings, and seasonal solar-return sanity check. Independent ephemeris comparison remains pending.`);

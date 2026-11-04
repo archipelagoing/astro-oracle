@@ -1,8 +1,19 @@
 # Astro Oracle
 
-A personalized astrology calendar concept for the PayPal AI hackathon. The proposed system turns transit data and a natal chart into daily interpretations, rhyming fortunes, and an importable calendar. This repository currently contains planning documents and specifications; implementation has not started.
+A personalized astrology calendar concept for the PayPal AI hackathon. The proposed system turns transit data and a natal chart into daily interpretations, rhyming fortunes, and an importable calendar. This repository contains planning documents and an initial browser-based transit calculator. The full oracle-generation and commerce pipeline is not yet implemented.
 
 LUNAR is a separate companion concept whose relationship to calendar purchases remains undecided.
+
+### Browser transit calculator
+
+Run `python3 -m http.server 4173 --directory web` and open
+`http://localhost:4173`. Calculate planetary transits from a birth timestamp, or
+use the secondary Astro-Seek link and ICS import. Calculations run locally in a
+Web Worker; this version does not generate AI fortunes or calculate houses.
+
+Run checks with `node tests/transits.test.cjs`. A manual GitHub Pages workflow is
+included; it has not been deployed. See [setup, calculation scope, and hosting
+limits](docs/ASTRO-ORACLE-github-pages.md).
 
 ### Project planning documents
 

@@ -1,9 +1,10 @@
 # Astro Oracle TODO
 
-Last updated: 2026-11-04. The repository contains product specifications and
-architecture pseudocode. No runnable application, automated tests, sample inputs,
-or payment integration exists yet. The next gap is agreeing on a concrete input
-and output example before building the deterministic pipeline.
+Last updated: 2026-11-04. Specifications and an initial GitHub Pages-compatible
+browser calculator exist. It calculates planetary transit candidates, previews ICS,
+and exports timed transits. The full daily oracle pipeline and payment integration
+remain unimplemented. Internal numerical/parser checks pass; browser QA and
+independent ephemeris verification are pending.
 
 ## Maintenance instructions
 
@@ -34,7 +35,8 @@ facts and may explain their symbolic meaning; it must not supply missing facts.
 
 ## Next steps
 
-1. Obtain sanitized source ICS and natal-chart fixtures — section 1.
+1. Verify the browser calculator against an independent ephemeris and in actual
+   browsers; obtain a raw Astro-Seek fixture and matching natal data — sections 1 and 6.
 2. Approve one finished calendar entry and resolve initial scoring, scheduling,
    and reference-data choices — section 1.
 3. Set up a runnable project and typed data contracts — section 2.
@@ -42,7 +44,8 @@ facts and may explain their symbolic meaning; it must not supply missing facts.
 5. Add AI generation and editorial review after the factual foundation works —
    section 4.
 
-The specifications are ready for review. Sample data, final formatting, verified
+The supplied finished-calendar sample has been inspected. Raw transit/natal
+fixtures, final formatting, verified
 symbol data, and implementation choices remain open. Proposed answers are a
 starting point, not approval to treat every default as settled.
 
@@ -67,6 +70,31 @@ Progress: On 2026-11-04, reviewed the repository specifications and added
 [proposed answers](docs/ASTRO-ORACLE-proposed-answers.md). The user confirmed BARTR
 is unrelated. Other new defaults remain proposals.
 
+## Browser calculator and GitHub Pages
+
+- [x] [Engineering] Add a static page with primary transit calculation and secondary
+  Astro-Seek external-link/import actions; no account sync is claimed.
+- [x] [Calculation] Add natal planetary positions and major-aspect crossing search
+  with Astronomy Engine, explicit UTC birth offset, and UTC month bounds.
+- [x] [Engineering] Add local finished-ICS preview and timed transit-candidate export.
+- [x] [Engineering] Include a manual Pages workflow publishing only `web/`.
+- [x] [Engineering] Check sample parsing, UTF-8 ICS round trip, birth date validation,
+  angular wraparound, crossing residuals, and a solar-return sanity case.
+- [ ] [Human] Review desktop/mobile layout and real-browser calculation/import/export.
+- [ ] [Calculation] Compare natal longitudes and event times with an independent
+  reference; assess station/tangent missed-crossing behavior before broader claims.
+- [ ] [Engineering] Add a validated birthplace/historical-timezone workflow and
+  Ascendant/MC/house calculations if replacing all chart-upload requirements.
+- [ ] [Engineering] Connect calculated candidates to the canonical scoring and
+  monthly assignment pipeline; do not label raw candidates as finished fortunes.
+- [ ] [Human] Enable and verify a Pages deployment when ready; use appropriate
+  separate hosting for commercial services and server-side secrets/payments.
+
+Progress: 2026-11-04 — `node tests/transits.test.cjs` passed with 30 sample events
+and 110 calculated November crossings in the test case. Worker syntax checks and
+whitespace checks passed. Browser preview host unavailable; no deployment or
+independent astronomical comparison performed. See [implementation notes](docs/ASTRO-ORACLE-github-pages.md).
+
 ## 2. Set up the foundation
 
 - [ ] [Engineering] Select and pin the runtime and dependencies; document a reproducible setup.
@@ -76,8 +104,8 @@ is unrelated. Other new defaults remain proposals.
 - [ ] [Engineering] Add fixture directories and local artifact storage excluded from Git when private.
 - [ ] [Engineering] Define model-provider interfaces and server-side secret configuration.
 
-Progress: Architecture contains example models and pseudocode only. No runtime,
-provider, or dependency stack has been adopted or tested.
+Progress: The static calculator uses vendored Astronomy Engine and plain JavaScript.
+The canonical backend data models, Python runtime, and AI provider remain unbuilt.
 
 ## 3. Build the deterministic calendar foundation
 
@@ -260,8 +288,9 @@ initial sandbox prototype.
 - **Database proposal:** Evaluate PostgreSQL from the new application proposal;
   the earlier SQLite suggestion is an alternative, not an adopted stack.
 
-- **Input dependency:** Real sanitized source and natal fixtures are absent; acquire
-  them before committing to a parser format.
+- **Input dependency:** A finished November oracle ICS is available. A raw
+  Astro-Seek source export and matching sanitized natal fixture remain absent;
+  do not infer the raw parser format from the finished calendar.
 - **Content dependency:** Final formatting and a distributable verified Sabian table
   remain unresolved.
 - **Open decisions:** Proposed stack, scoring defaults, model, pricing, and operating
