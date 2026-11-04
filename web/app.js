@@ -10,11 +10,8 @@ $('timezone').value=Intl.DateTimeFormat().resolvedOptions().timeZone;
 function setStatus(message){$('status').textContent=message;}
 function render(items,note){
   $('entries').replaceChildren();$('result-note').textContent=note;$('results').hidden=false;
-  for(const item of items){const article=document.createElement('article');article.className='entry';
-    const title=document.createElement('h3');title.textContent=item.title;
-    const time=document.createElement('time');time.textContent=item.when;
-    const desc=document.createElement('p');desc.textContent=item.description;
-    article.append(title,time,desc);$('entries').append(article);}
+  OracleCalendar.mount($('entries'),items,$('timezone').value.trim()||'UTC');
+  $('results').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
 }
 function reset(){if(worker){worker.terminate();worker=null;}$('calculate').disabled=false;exportEvents=[];$('download').hidden=true;$('results').hidden=true;$('natal-preview').hidden=true;}
 function invalidateBirth(){reviewedBirth=null;$('birth-review').hidden=true;$('birth-confirmed').checked=false;reset();}
@@ -127,11 +124,11 @@ $('import').addEventListener('change',async()=>{
     const events=OracleCore.parseICS(text);
     if(events.some(e=>(e.SUMMARY||'').startsWith('Tr. '))){
       const report=OracleCore.parseAstroSeek(text);
-      render(report.transits.map(t=>({title:`${t.movingBody} ${t.aspect} natal ${t.targetBody}`,when:t.exactAt,description:`Source position: ${t.movingDegree.toFixed(4)}° ${t.movingSign}. Transiting house: ${t.movingHouse??'not supplied'}.\nStill needed: ${t.missingFacts.join(', ').replaceAll('_',' ')}.\n\nOriginal description:\n${t.source.DESCRIPTION}`})),`${report.transits.length} structured transit records from ${report.sourceEventCount} source events. ${report.issues.length} import issue(s). Source facts are preserved; natal facts and astronomical verification remain pending.`);
+      render(report.transits.map(t=>({title:`${t.movingBody} ${t.aspect} natal ${t.targetBody}`,start:t.exactAt,when:t.exactAt,description:`Source position: ${t.movingDegree.toFixed(4)}° ${t.movingSign}. Transiting house: ${t.movingHouse??'not supplied'}.\nStill needed: ${t.missingFacts.join(', ').replaceAll('_',' ')}.\n\nOriginal description:\n${t.source.DESCRIPTION}`})),`${report.transits.length} structured transit records from ${report.sourceEventCount} source events. ${report.issues.length} import issue(s). Source facts are preserved; natal facts and astronomical verification remain pending.`);
       setStatus(report.issues.length?`Import issues: ${report.issues.map(i=>`${i.uid||'event '+i.event}: ${i.code}`).join('; ')}`:'Raw Astro-Seek import complete. No natal placements were inferred.');
       return;
     }
-    render(events.map(e=>({title:e.SUMMARY||'Untitled event',when:e.DTSTART||'No date supplied',description:e.DESCRIPTION||''})),`${events.length} imported events from ${file.name}. Original dates and descriptions are shown as supplied; source facts and timezone labels have not been verified.`);setStatus('Calendar imported locally.');
+    render(events.map(e=>({title:e.SUMMARY||'Untitled event',start:e.DTSTART,when:e.DTSTART||'No date supplied',description:e.DESCRIPTION||''})),`${events.length} imported events from ${file.name}. Original dates and descriptions are shown as supplied; source facts and timezone labels have not been verified.`);setStatus('Calendar imported locally.');
   }catch(error){setStatus(error.message);}
 });
 $('download').addEventListener('click',()=>{const blob=new Blob([OracleCore.exportICS(exportEvents)],{type:'text/calendar;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='astro-oracle-transits.ics';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});

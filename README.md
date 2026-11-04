@@ -17,10 +17,15 @@ AI writing, and PayPal access system are still in development.
   and planetary transits locally.
 - Choose a transit month and display results in a selected timezone.
 - Use a secondary Astro-Seek link, then import an ICS file for local preview.
+- View calculated or imported events in a weekly calendar with flippable daily cards.
+- Reveal fortune and meaning from completed oracle imports, with expandable details.
 - Download calculated transit events as an ICS calendar.
 - Run the static application locally or prepare it for GitHub Pages.
 - Parse raw Astro-Seek transits into structured source records and flag missing
   natal facts and invalid/conflicting records.
+
+Cards for calculated/raw candidates are labeled unranked and do not invent fortunes.
+Import a completed oracle ICS to see its existing ranks, fortunes, and meanings.
 
 The Astro-Seek option is an external-link and file-import workflow. It does not
 connect an account or automatically synchronize data.
@@ -102,6 +107,7 @@ code and public repository files.
 node tests/transits.test.cjs
 node tests/astroseek.test.cjs
 node tests/birth.test.cjs
+node tests/calendar.test.cjs
 ```
 
 The checks cover sample-file parsing, ICS text round trips and UTF-8 line folding,

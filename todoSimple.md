@@ -76,14 +76,15 @@ AI services, and other backend configuration remain unfinished.
 ## Confirmed weekly card interface
 
 - [x] [Human] Confirm weekly calendar direction and card content with the owner.
-- [ ] [Engineering] After generation works, build a weekly calendar with day navigation
-  and one flippable card per date; front: date, transit glyph, importance rank;
-  back: fortune and meaning, with expandable astrology details.
+- [x] [Engineering] Build a weekly calendar with navigation and one flippable card
+  per date; completed imports retain rank, glyph, fortune, meaning, and details.
+  Group raw/calculated candidates by day, label them unranked, and do not invent fortunes.
 - [ ] [Engineering] Support keyboard/touch flipping, visible focus, reduced-motion
   preferences, and an accessible responsive layout.
 
 Progress: Owner selected this card content and generation-first build order on
-2026-11-04. Neither the weekly layout nor card interactions are implemented yet.
+2026-11-04. Weekly card rendering is now implemented following the owner’s request to replace
+the live list. Canonical ranking and fortune generation remain unfinished.
 
 ## 1. Define the product and resolve inputs
 
@@ -125,8 +126,10 @@ is unrelated. Other new defaults remain proposals.
   Ascendant/MC/house calculations if replacing all chart-upload requirements.
 - [ ] [Engineering] Connect calculated candidates to the canonical scoring and
   monthly assignment pipeline; do not label raw candidates as finished fortunes.
-- [ ] [Human] Enable and verify a Pages deployment when ready; use appropriate
-  separate hosting for commercial services and server-side secrets/payments.
+- [x] [Human] Enable GitHub Actions Pages publishing and verify the deployed page
+  and autofill scripts match the current source.
+- [ ] [Engineering] Use appropriate separate hosting for commercial services and
+  server-side secrets/payments.
 
 Progress: 2026-11-04 — `node tests/transits.test.cjs` passed with 30 sample events
 and 110 calculated November crossings in the test case. Worker syntax checks and
@@ -356,3 +359,10 @@ initial sandbox prototype.
 - **Open decisions:** Proposed stack, scoring defaults, model, pricing, and operating
   limits need evaluation or approval; see the proposed answers document.
 - **Decision:** 2026-11-04 — BARTR is unrelated; project identity is Astro Oracle.
+
+Deployment progress — 2026-11-04: Published commit `be90b10` to `main`, switched
+Pages from root-branch publishing to GitHub Actions, and enabled deployment on site
+changes. Run 41920645150 succeeded. Public HTML, app.js, and birth.js matched the
+local source byte-for-byte. Live URL: https://archipelagoing.github.io/astro-oracle/.
+The personal raw Astro-Seek file remains outside this publication commit. Browser
+click-through verification is still pending.
