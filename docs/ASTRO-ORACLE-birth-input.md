@@ -29,7 +29,9 @@ repeated times, gaps, fractional-hour offsets, and skipped dates.
 - No match: block calculation and ask the user to check their record/timezone.
   Never move a nonexistent time forward automatically.
 
-The user confirms place, coordinates, zone, and instant before calculation starts.
+Selecting Calculate opens a confirmation dialog for place, coordinates, zone, and
+instant; Confirm & calculate starts the worker directly. A separate earlier
+confirmation step is no longer required.
 Editing an input invalidates that confirmation. Changing coordinates does not
 silently select a different timezone. Historical political boundaries and browser
 timezone-database versions can affect results, especially older dates. A city
@@ -69,3 +71,8 @@ terms and service capacity before connecting the commercial product; paid API
 credentials must not be embedded in the Pages frontend.
 
 Reference: [Open-Meteo geocoding documentation](https://open-meteo.com/en/docs/geocoding-api).
+
+Regression coverage: `node tests/calculation-flow.test.cjs` exercises the actual
+application event handlers with a minimal DOM: submit, confirm, worker-result
+rendering, visible card, flip/back, cancellation, and edited-input reconfirmation.
+It does not establish native-browser compatibility.

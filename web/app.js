@@ -1,6 +1,6 @@
 const $=id=>document.getElementById(id);
 let exportEvents=[],worker;
-let reviewedBirth=null,placeResults=[],placeRequest=null,searchSequence=0,placeTimer=null,activePlace=-1;
+let reviewedBirth=null,placeResults=[],placeRequest=null,searchSequence=0,placeTimer=null,activePlace=-1,pendingCalculation=false;
 const birthFields=['birth-date','birth-time','place-name','latitude','longitude','birth-timezone'];
 const birthSignature=()=>JSON.stringify(birthFields.map(id=>$(id).value.trim()));
 const zodiacSigns=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
@@ -14,10 +14,10 @@ function render(items,note){
   $('results').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
 }
 function reset(){if(worker){worker.terminate();worker=null;}$('calculate').disabled=false;exportEvents=[];$('download').hidden=true;$('results').hidden=true;$('natal-preview').hidden=true;}
-function invalidateBirth(){reviewedBirth=null;$('birth-review').hidden=true;$('birth-confirmed').checked=false;reset();}
+function invalidateBirth(){reviewedBirth=null;if($('birth-review').open)$('birth-review').close();reset();}
 for(const id of birthFields)$(id).addEventListener('input',invalidateBirth);
-$('birth-choice').addEventListener('change',()=>{$('birth-confirmed').checked=false;});
-$('review-birth').addEventListener('click',()=>{
+$('birth-choice').addEventListener('change',()=>{$('confirm-birth').disabled=!$('birth-choice').value;});
+function reviewBirth(){
   invalidateBirth();
   try{
     if(!$('place-name').value.trim())throw Error('Enter or select a birthplace.');
@@ -28,10 +28,20 @@ $('review-birth').addEventListener('click',()=>{
     const choices=$('birth-choice');choices.replaceChildren();
     if(candidates.length>1){const prompt=document.createElement('option');prompt.value='';prompt.textContent='This clock time occurred twice. Choose the recorded offset.';choices.append(prompt);}
     for(const candidate of candidates){const option=document.createElement('option');option.value=candidate.iso;option.textContent=`${candidate.label} → ${candidate.iso}`;choices.append(option);}
-    reviewedBirth={signature:birthSignature(),candidates,point};
-    $('birth-summary').textContent=`${$('place-name').value.trim()} · ${point.latitude}°, ${point.longitude}° · ${zone}. ${candidates.length>1?'The clock repeated this time; a choice is required.':'One matching birth instant found.'}`;
-    $('birth-review').hidden=false;setStatus('Review the birth instant and confirm the details before calculating.');
+    reviewedBirth={signature:birthSignature(),candidates,point,confirmed:false};
+    $('birth-summary').textContent=`${$('birth-date').value} at ${$('birth-time').value} · ${$('place-name').value.trim()} · ${point.latitude}°, ${point.longitude}° · ${zone}. ${candidates.length>1?'The clock repeated this time; choose the correct occurrence.':'Confirm the birth details and resolved instant below.'}`;
+    $('confirm-birth').disabled=!choices.value;
+    $('confirm-birth').textContent=pendingCalculation?'Confirm & calculate':'Confirm birth details';
+    $('birth-review').showModal();
   }catch(error){setStatus(error.message);}
+}
+$('review-birth').addEventListener('click',()=>{pendingCalculation=false;reviewBirth();});
+$('cancel-birth').addEventListener('click',()=>{$('birth-review').close();pendingCalculation=false;});
+$('birth-review').addEventListener('cancel',()=>{pendingCalculation=false;});
+$('confirm-birth').addEventListener('click',()=>{
+  if(!reviewedBirth||reviewedBirth.signature!==birthSignature()||!reviewedBirth.candidates.some(c=>c.iso===$('birth-choice').value))return;
+  reviewedBirth.confirmed=true;$('birth-review').close();
+  if(pendingCalculation){pendingCalculation=false;startCalculation();}else setStatus('Birth details confirmed. You can calculate your transits.');
 });
 function closeSuggestions(){
   $('place-suggestions').hidden=true;$('place-query').setAttribute('aria-expanded','false');
@@ -94,8 +104,12 @@ $('place-query').addEventListener('keydown',event=>{
 $('place-query').addEventListener('blur',()=>{cancelPlaceSearch();$('place-query').setAttribute('aria-busy','false');});
 $('search-place').addEventListener('click',()=>{clearTimeout(placeTimer);$('place-query').focus();searchPlaces();});
 $('calculate-form').addEventListener('submit',event=>{
-  event.preventDefault();reset();
-  if(!reviewedBirth||reviewedBirth.signature!==birthSignature()||!$('birth-confirmed').checked){setStatus('Check your birth time and confirm the birthplace details first.');return;}
+  event.preventDefault();
+  if(!reviewedBirth||reviewedBirth.signature!==birthSignature()||!reviewedBirth.confirmed){pendingCalculation=true;reviewBirth();return;}
+  startCalculation();
+});
+function startCalculation(){
+  reset();
   const birth=$('birth-choice').value,month=$('month').value,timezone=$('timezone').value.trim();
   if(!reviewedBirth.candidates.some(c=>c.iso===birth)){setStatus('Choose which occurrence of the repeated birth time applies before continuing.');return;}
   if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)||month<'1900-01'||month>'2100-12'){setStatus('Choose a transit month between 1900 and 2100.');return;}
@@ -116,7 +130,7 @@ $('calculate-form').addEventListener('submit',event=>{
     $('download').hidden=exportEvents.length===0;$('calculate').disabled=false;worker.terminate();worker=null;setStatus('Calculation complete.');
   };
   worker.postMessage({birth,month});
-});
+}
 $('import').addEventListener('change',async()=>{
   const file=$('import').files[0];if(!file)return;reset();
   try{if(file.size>5*1024*1024)throw Error('Choose a calendar smaller than 5 MB.');

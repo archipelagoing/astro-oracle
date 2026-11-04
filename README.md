@@ -43,8 +43,8 @@ Open **http://localhost:4173**. Use the server rather than opening the HTML file
 directly so the calculation worker can load correctly.
 
 Enter the birth date and exact local clock time. Search for the birthplace or
-enter its name, coordinates, and IANA timezone manually. Select **Check birth time**,
-review the resolved UTC instant, and confirm the details. If the clock repeated
+enter its name, coordinates, and IANA timezone manually. Select **Calculate my transits**,
+review the birth details in the confirmation dialog, then select **Confirm & calculate**. If the clock repeated
 that time, choose the correct occurrence; nonexistent clock times are rejected.
 Historical conversion uses your browser's timezone database. See the
 [birth-input notes](docs/ASTRO-ORACLE-birth-input.md).
@@ -93,8 +93,7 @@ LUNAR is a separate concept and is not required to use the transit calculator.
 Birth dates/times and uploaded ICS files are processed in the browser and are not
 submitted to a backend or persisted. City suggestions requested as you type send only the
 city query to Open-Meteo, which supplies suggested place coordinates and timezone.
-Manual place entry avoids that request. The application loads optional
-fonts from Google Fonts; the astronomy engine is included locally.
+Manual place entry avoids that request. The interface uses system-font fallbacks and the astronomy engine is included locally.
 
 Readable calendar exports can be copied. Encrypted fortunes and buyer-specific
 metadata are design proposals, not implemented copy protection. Any future private
@@ -108,6 +107,7 @@ node tests/transits.test.cjs
 node tests/astroseek.test.cjs
 node tests/birth.test.cjs
 node tests/calendar.test.cjs
+node tests/calculation-flow.test.cjs
 ```
 
 The checks cover sample-file parsing, ICS text round trips and UTF-8 line folding,

@@ -108,8 +108,7 @@ d1b3ab4b86aa409f78c0f0d95162a847496cba7e938eb6f4712cf9c1c45f4a2e
 ```
 
 The digest pins the included bytes; review upgrades deliberately. No runtime CDN
-is needed for the calculation engine. Optional typography currently loads from
-Google Fonts and falls back to system fonts.
+is needed for the calculation engine. Typography uses system-font fallbacks without an external font request.
 
 References: [Astronomy Engine documentation](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md),
 [GitHub Pages creation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site),

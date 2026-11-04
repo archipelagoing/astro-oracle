@@ -366,3 +366,16 @@ changes. Run 41920645150 succeeded. Public HTML, app.js, and birth.js matched th
 local source byte-for-byte. Live URL: https://archipelagoing.github.io/astro-oracle/.
 The personal raw Astro-Seek file remains outside this publication commit. Browser
 click-through verification is still pending.
+
+Weekly card deployment — 2026-11-04: Commit `3cf4cbf` deployed successfully in
+Actions run 41921926052. Live HTML and calendar.js match the source. All 30 completed
+sample entries pass fortune/meaning/rank extraction and date-grouping checks.
+Calculated/raw entries show unranked candidates, not invented fortunes. Native
+Chrome inspection timed out; visual/click-through QA remains unverified.
+
+Calculation-flow fix — 2026-11-04: Observed the previous Calculate action being
+blocked by an easy-to-miss confirmation prerequisite. Calculate now opens an
+explicit confirmation dialog and Confirm & calculate starts the worker. Added
+an application-wiring regression test covering visible cards and flip/back.
+Removed external font loading. Browser inspection remains unreliable; this fix
+is verified by application-flow, birth, parser, and calendar checks.
