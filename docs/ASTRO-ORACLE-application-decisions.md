@@ -1,5 +1,49 @@
 # Astro Oracle — Application Reconciliation Notes
 
+## Confirmed interface direction — 2026-11-04
+
+Additional owner decisions:
+
+- Users enter birth date, exact time, and birthplace; the application calculates
+  the natal chart. Do not require manual natal-placement entry as the primary path.
+- Preserve the supplied completed November ICS's section order and writing format
+  as the approved rendering reference. Check factual discrepancies separately;
+  format approval does not certify the sample's astronomical claims.
+- Use an OpenAI API backend for AI fortunes. Keep provider credentials and any
+  private ranking configuration outside the GitHub Pages frontend and public repo.
+
+Further owner confirmations on 2026-11-04:
+
+- Default to whole-sign houses.
+- Provide city search and automatic historical-timezone resolution, with user
+  confirmation and manual correction of the selected place/timezone information.
+- Prove the supplied November 2026 import/generation workflow before expanding
+  to arbitrary users and months. Keep personal birth data outside committed fixtures.
+
+Owner also confirmed:
+
+- Matching November birth details will be entered locally once the form is ready.
+- Provisional ranking defaults may be selected for prototype review; they are not
+  the owner's final private algorithm and should be labeled accordingly.
+- The owner will provide or identify the Sabian edition. Do not fabricate or
+  silently substitute symbol wording while that source remains pending.
+
+Geocoding/timezone provider, backend hosting, model choice, operating limits,
+reference natal data, and verified Sabian data remain unresolved. The confirmed
+experience does not imply any external service has been configured.
+
+The owner chose a Google Calendar-style weekly layout with one flippable card
+per day. The front shows the date, transit glyph, and importance rank. The back
+shows the fortune and meaning, with expandable astrological details. Build raw
+Astro-Seek import and generation before implementing the weekly card interface.
+The supplied completed ICS is the preferred content-format reference.
+
+Both calendar files are now present: the finished November oracle and the raw
+Astro-Seek November transit export. The latter supplies exact UTC timestamps,
+transiting positions, natal-target names, and transiting houses in descriptions.
+Do not assume it supplies full natal positions or natal houses. Identify missing
+facts explicitly rather than deriving a natal chart from ambiguous aspect branches.
+
 The [new application proposal](ASTRO-ORACLE-application-architecture-source.md)
 expands the [original pipeline](ASTRO-ORACLE-architecture-source.md). This records
 its implications and unresolved choices without treating all recommendations as
@@ -15,7 +59,8 @@ approved. No implementation has been executed.
   has not purchased access. A purchase and a generation job have separate states.
 - Enforce authorization server-side on both content retrieval and export. Locked
   content must not appear in API payloads or previews accessible without entitlement.
-- Begin with uploaded natal charts. Automatic birth-chart calculation is deferred.
+- Use birth date/time/place entry and calculated natal charts as the primary path,
+  per the later owner decision above. The older upload-first proposal is superseded.
 - Treat PostgreSQL as the new proposed database choice, superseding the earlier
   SQLite suggestion for planning purposes; stack adoption still needs evaluation.
 
