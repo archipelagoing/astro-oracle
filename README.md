@@ -11,8 +11,8 @@ AI writing, and PayPal access system are still in development.
 
 ## What works today
 
-- Enter birth date and exact local time, search for a birthplace, and review or
-  correct coordinates and timezone without uploading an Astro-Seek calendar.
+- Enter birth date and exact local time, search for a birthplace, and automatically
+  fill coordinates and timezone without uploading an Astro-Seek calendar.
 - Confirm the resolved birth instant and calculate natal planetary placements
   and planetary transits locally.
 - Choose a transit month and display results in a selected timezone.
@@ -42,8 +42,8 @@ python3 -m http.server 4173 --directory web
 Open **http://localhost:4173**. Use the server rather than opening the HTML file
 directly so the calculation worker can load correctly.
 
-Enter the birth date and exact local clock time. Search for the birthplace or
-enter its name, coordinates, and IANA timezone manually. Select **Calculate my transits**,
+Enter the birth date and exact local clock time. Select the birthplace from the city suggestions; its coordinates and IANA timezone
+are filled automatically. Select **Calculate my transits**,
 review the birth details in the confirmation dialog, then select **Confirm & calculate**. If the clock repeated
 that time, choose the correct occurrence; nonexistent clock times are rejected.
 Historical conversion uses your browser's timezone database. See the
@@ -93,7 +93,7 @@ LUNAR is a separate concept and is not required to use the transit calculator.
 Birth dates/times and uploaded ICS files are processed in the browser and are not
 submitted to a backend or persisted. City suggestions requested as you type send only the
 city query to Open-Meteo, which supplies suggested place coordinates and timezone.
-Manual place entry avoids that request. The interface uses system-font fallbacks and the astronomy engine is included locally.
+The interface uses system-font fallbacks and the astronomy engine is included locally.
 
 Readable calendar exports can be copied. Encrypted fortunes and buyer-specific
 metadata are design proposals, not implemented copy protection. Any future private

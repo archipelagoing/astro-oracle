@@ -20,7 +20,7 @@ $('birth-choice').addEventListener('change',()=>{$('confirm-birth').disabled=!$(
 function reviewBirth(){
   invalidateBirth();
   try{
-    if(!$('place-name').value.trim())throw Error('Enter or select a birthplace.');
+    if(!$('place-name').value.trim())throw Error('Select your birthplace from the city suggestions.');
     const point=OracleBirth.coordinates($('latitude').value,$('longitude').value);
     const zone=$('birth-timezone').value.trim();
     const candidates=OracleBirth.resolveLocal($('birth-date').value,$('birth-time').value,zone);
@@ -52,7 +52,7 @@ function choosePlace(index){
   const place=placeResults[index];if(!place)return;
   cancelPlaceSearch();invalidateBirth();$('place-query').value=place.label;
   $('place-name').value=place.label;$('latitude').value=place.latitude;$('longitude').value=place.longitude;$('birth-timezone').value=place.timezone;
-  $('place-status').textContent='Birthplace filled in. Review the coordinates and birth timezone below, then check the birth time.';
+  $('place-status').textContent='Birthplace selected. You can now calculate your transits.';
 }
 function highlightPlace(index){
   activePlace=index;
@@ -62,14 +62,14 @@ function highlightPlace(index){
 async function searchPlaces(){
   placeRequest?.abort();const sequence=++searchSequence,query=$('place-query').value.trim();
   closeSuggestions();
-  if(query.length<3){$('place-status').textContent='Type at least three characters for suggestions, or use manual entry below.';return;}
+  if(query.length<3){$('place-status').textContent='Type at least three characters for birthplace suggestions.';return;}
   placeRequest=new AbortController();const controller=placeRequest;
   const timeout=setTimeout(()=>controller.abort(),12000);
   $('place-status').textContent='Finding birthplace suggestions…';$('place-query').setAttribute('aria-busy','true');
   try{
     const url=new URL('https://geocoding-api.open-meteo.com/v1/search');url.search=new URLSearchParams({name:query,count:'10',language:'en',format:'json'});
     const response=await fetch(url,{signal:controller.signal,credentials:'omit',referrerPolicy:'no-referrer'});
-    if(!response.ok)throw Error('City search is unavailable. Enter the place, coordinates, and timezone manually.');
+    if(!response.ok)throw Error('City search is unavailable. Please retry in a moment.');
     const places=OracleBirth.placesFromResponse(await response.json());if(sequence!==searchSequence)return;
     placeResults=places;const list=$('place-suggestions');list.replaceChildren();
     places.forEach((place,i)=>{
@@ -79,8 +79,8 @@ async function searchPlaces(){
       option.addEventListener('click',()=>choosePlace(i));list.append(option);
     });
     if(document.activeElement===$('place-query')){list.hidden=places.length===0;$('place-query').setAttribute('aria-expanded',String(places.length>0));}
-    $('place-status').textContent=places.length?`${places.length} suggestions. Use the arrow keys and Enter, or select a birthplace.`:'No places found. Try a more specific city or use manual entry.';
-  }catch(error){if(sequence===searchSequence)$('place-status').textContent=error.name==='AbortError'?'Search timed out. Try again or enter the place manually.':error.message;}
+    $('place-status').textContent=places.length?`${places.length} suggestions. Use the arrow keys and Enter, or select a birthplace.`:'No places found. Try the city name followed by a comma and its state or country.';
+  }catch(error){if(sequence===searchSequence)$('place-status').textContent=error.name==='AbortError'?'Search timed out. Please try again.':error.message;}
   finally{clearTimeout(timeout);if(sequence===searchSequence)$('place-query').setAttribute('aria-busy','false');}
 }
 function schedulePlaceSearch(event){

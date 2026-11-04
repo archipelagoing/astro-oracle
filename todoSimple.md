@@ -389,3 +389,8 @@ a synthetic profile and observed Calculate open the confirmation dialog, Confirm
 a weekly card view. This replaces earlier unverified claims for that specific
 flow. Added validation messages directly below Calculate and progress on the
 button so incomplete inputs or ongoing work cannot be mistaken for inactivity.
+
+Birthplace simplification — 2026-11-04: At the owner's request, removed the
+visible birthplace name/coordinate/timezone correction panel. Selected city data
+is retained internally for calculation and confirmation; manual entry instructions
+were removed from the interface.

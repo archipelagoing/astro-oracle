@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Astro Oracle · Your personal sky</title>
-  <link rel="stylesheet" href="style.css?v=20261104-feedback">
+  <link rel="stylesheet" href="style.css?v=20261104-place">
 </head>
 <body>
   <header><a class="brand" href="./">✧ ASTRO ORACLE</a><span>YOUR PERSONAL SKY</span></header>
@@ -11,7 +11,7 @@
     <section class="intro"><p class="eyebrow">A LITTLE PERSPECTIVE FROM THE COSMOS</p>
       <h1>Your chart.<br>Your changing sky.</h1>
       <p class="lead">Discover when the planets form aspects to your natal placements. Calculate here, or bring a calendar you already have.</p>
-      <p class="privacy">✧ Your birth date, time, and calendars stay in this browser. City search sends only your search text to Open-Meteo; manual place entry works offline.</p>
+      <p class="privacy">✧ Your birth date, time, and calendars stay in this browser. City search sends only your search text to Open-Meteo.</p>
     </section>
     <section class="panel" aria-labelledby="calculate-title">
       <div class="section-heading"><span class="step">01</span><div><p class="eyebrow">START WITH YOUR STARS</p><h2 id="calculate-title">Calculate my transits</h2></div></div>
@@ -22,15 +22,12 @@
         <div class="place-autocomplete"><label>Birthplace city<input id="place-query" type="search" placeholder="Start typing a city…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="place-suggestions" aria-describedby="place-help" aria-busy="false"></label>
           <ul id="place-suggestions" role="listbox" aria-label="Birthplace suggestions" hidden></ul></div>
         <div class="actions place-actions"><button id="search-place" type="button" class="secondary">Search cities</button></div>
-        <p class="help" id="place-help">Suggestions appear after three characters. Selecting a city fills its coordinates and timezone. Search uses <a href="https://open-meteo.com/en/docs/geocoding-api" target="_blank" rel="noopener noreferrer">Open-Meteo / GeoNames</a>. Only the city query is sent. You can skip search and enter all fields below manually.</p>
+        <p class="help" id="place-help">Suggestions appear after three characters. Selecting a city fills its coordinates and timezone. Search uses <a href="https://open-meteo.com/en/docs/geocoding-api" target="_blank" rel="noopener noreferrer">Open-Meteo / GeoNames</a>. Only the city query is sent. Select a suggested city to set your birthplace.</p>
         <p id="place-status" role="status" aria-live="polite"></p>
-        <fieldset id="birth-details"><legend>Review or correct birthplace details</legend>
-          <label>Place name<input id="place-name" required placeholder="City, region, country" autocomplete="off"></label>
-          <div class="fields"><label>Latitude (north positive)<input id="latitude" required type="number" min="-90" max="90" step="any" inputmode="decimal"></label>
-            <label>Longitude (east positive)<input id="longitude" required type="number" min="-180" max="180" step="any" inputmode="decimal"></label></div>
-          <label>Birthplace timezone<input id="birth-timezone" required placeholder="America/New_York" autocomplete="off"></label>
-          <p class="help">Confirm the zone applies to this birthplace and birth date. Changing coordinates manually does not automatically change the timezone. Historical rules depend on your browser's timezone database.</p>
-        </fieldset>
+        <input id="place-name" type="hidden">
+        <input id="latitude" type="hidden">
+        <input id="longitude" type="hidden">
+        <input id="birth-timezone" type="hidden">
         <button id="review-birth" type="button" class="secondary">Review birth details</button>
         <div class="fields"><label>Transit month (UTC)<input id="month" type="month" required min="1900-01" max="2100-12"></label>
           <label>Display timezone<input id="timezone" required value="UTC" placeholder="America/New_York"></label></div>
@@ -59,6 +56,6 @@
     </dialog>
   </main>
   <footer>✧ Astrology as reflection, not a prediction.<br>Calculated with the open-source <a href="https://github.com/cosinekitty/astronomy">Astronomy Engine</a>. AI fortunes and payment access are separate services still to come.</footer>
-  <script src="core.js?v=20261104-feedback"></script><script src="birth.js?v=20261104-feedback"></script><script src="calendar.js?v=20261104-feedback"></script><script src="app.js?v=20261104-feedback"></script>
+  <script src="core.js?v=20261104-place"></script><script src="birth.js?v=20261104-place"></script><script src="calendar.js?v=20261104-place"></script><script src="app.js?v=20261104-place"></script>
 </body>
 </html>
