@@ -6,6 +6,9 @@ LUNAR is a separate companion concept whose relationship to calendar purchases r
 
 ### Project planning documents
 
+- [Expanded application architecture](docs/ASTRO-ORACLE-application-architecture-source.md)
+- [Application decisions and reconciliation](docs/ASTRO-ORACLE-application-decisions.md)
+
 - [Astro Oracle architecture proposal](docs/ASTRO-ORACLE-architecture-source.md)
 - [Calendar rules](docs/ASTRO-ORACLE-calendar-rules.md)
 - [Implementation questions](docs/ASTRO-ORACLE-implementation-questions.md)

@@ -4,6 +4,16 @@ This document answers the [implementation questions](ASTRO-ORACLE-implementation
 
 Some questions require artifacts or owner decisions that are not in the repository. Those are identified as **pending** rather than presented as settled facts. No application, payment integration, verified dataset, or completed calendar is supplied by this document.
 
+## Later application proposal
+
+The [expanded application source](ASTRO-ORACLE-application-architecture-source.md)
+introduces generation independent of payment, free first-week access, date-range
+entitlements, angel-number pricing, and PostgreSQL. Its
+[reconciliation notes](ASTRO-ORACLE-application-decisions.md) identify conflicts
+with the earlier defaults below. In particular, section 8's $5 payment-first flow
+and section 7's SQLite suggestion are historical alternatives, not the current
+application planning direction. Unresolved scope and pricing choices remain open.
+
 ## 1. Inputs and finished output
 
 **1.1 — Source file.** Pending: obtain a real Astro-Seek export and a sanitized fixture that may be committed. Inspect its properties before writing its adapter. Initially accept only explicitly recognized natal-aspect events with the required bodies, positions, aspect, source identity, and exact timestamp. Report unsupported events separately. Do not infer missing degrees from event titles unless a tested source-format rule supports that extraction.

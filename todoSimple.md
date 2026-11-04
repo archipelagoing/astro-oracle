@@ -147,17 +147,45 @@ human-calibrated review and cannot be established by a model score alone.
 
 ## 5. Connect the user and PayPal sandbox workflow
 
+Generation produces canonical approved content independently of payment. Commerce
+unlocks date ranges; it must not change the underlying entries. See the
+[application proposal reconciliation](docs/ASTRO-ORACLE-application-decisions.md).
+
+- [ ] [Human] Resolve full-month generation versus a seven-day MVP; define rank
+  scope and partial-export validation without weakening canonical coverage checks.
+- [ ] [Human] Define the free-week anchor, reset rules, purchase overlap behavior,
+  and inclusive/exclusive boundaries for daily, weekly, monthly, and yearly access.
+- [ ] [Human] Confirm the proposed $0.22/$1.11/$4.44/$33.33 catalog and which products
+  ship; define a paid demo range distinct from dates already free.
+- [ ] [Calculation] Implement entitlement date arithmetic with known results for
+  leap years, month ends, overlapping ranges, and timezone changes.
+- [ ] [Engineering] Model orders, captures, entitlements, canonical calendar versions,
+  and jobs separately, with ownership and database uniqueness constraints.
+- [ ] [Engineering] Enforce free/paid access server-side for API content and ICS
+  exports; locked entries must not leak through client payloads.
+- [ ] [Engineering] Limit unpaid generation requests and reuse approved datasets;
+  expose unavailable future dates separately from purchased access.
+- [ ] [Human] Define refund/reversal access policy and explain that downloaded
+  static calendars cannot be recalled.
+- [ ] [Engineering] Verify and reconcile sandbox payment notifications, refunds,
+  and reversals according to the selected access policy.
+
 - [ ] [Engineering] Build input upload, preferences, validation report, and product preview screens.
 - [ ] [Engineering] Integrate sandbox checkout with server-side payment verification.
-- [ ] [Engineering] Associate confirmed purchases with immutable generation requests.
+- [ ] [Engineering] Associate confirmed purchases with immutable product/date ranges and grant
+  entitlements independently of generation-job state.
 - [ ] [Engineering] Handle repeated notifications and interrupted checkout without duplicate charges or jobs.
-- [ ] [Engineering] Add job progress, failure messages, and retries tied to the original purchase.
+- [ ] [Engineering] Add independent generation progress, failure messages, and retries that preserve
+  existing purchases and entitlements without charging again.
 - [ ] [Engineering] Deliver validated ICS through an access-controlled result page and repeat download.
 - [ ] [Engineering] Show sandbox status clearly and keep credentials out of client code and logs.
 - [ ] [Human] Define personal-data retention, deletion, and artifact access controls.
 - [ ] [Human] Review the journey for readability, keyboard access, and mobile use.
 
-Progress: The purchase experience is proposed in the answers document. No payment
+Progress: On 2026-11-04, incorporated the expanded application proposal into this
+backlog. Canonical generation is separate from payment; the new free-week/catalog
+proposal replaces the earlier $5 payment-first flow as the planning direction.
+Pricing, period semantics, and MVP generation scope still need decisions. No payment
 behavior, web interface, or external integration has been verified.
 
 ## 6. Validate the complete result
@@ -222,6 +250,15 @@ have no established token-spending rule. A live-money launch is outside the
 initial sandbox prototype.
 
 ## Blockers and decisions
+
+- **New source:** [Application architecture and detailed pseudocode](docs/ASTRO-ORACLE-application-architecture-source.md),
+  supplied 2026-11-04, preserved verbatim. See reconciliation notes for conflicts.
+- **Scope conflict:** Existing full-month generation versus new seven-day MVP;
+  resolve before implementing coverage, ranks, and favorite behavior.
+- **Commerce decisions:** Free-week anchor, product-period boundaries, paid demo
+  range, refund policy, and unpaid generation limits remain open.
+- **Database proposal:** Evaluate PostgreSQL from the new application proposal;
+  the earlier SQLite suggestion is an alternative, not an adopted stack.
 
 - **Input dependency:** Real sanitized source and natal fixtures are absent; acquire
   them before committing to a parser format.
