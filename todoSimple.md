@@ -379,3 +379,13 @@ explicit confirmation dialog and Confirm & calculate starts the worker. Added
 an application-wiring regression test covering visible cards and flip/back.
 Removed external font loading. Browser inspection remains unreliable; this fix
 is verified by application-flow, birth, parser, and calendar checks.
+
+Deployment confirmation: `7e809ef` succeeded in run 41922664373; the live HTML
+matched the corrected confirmation-flow source on 2026-11-04.
+
+Live-browser verification — 2026-11-04: In Chrome on the public Pages site, used
+a synthetic profile and observed Calculate open the confirmation dialog, Confirm
+& calculate start the worker, and completion produce 110 transit candidates and
+a weekly card view. This replaces earlier unverified claims for that specific
+flow. Added validation messages directly below Calculate and progress on the
+button so incomplete inputs or ongoing work cannot be mistaken for inactivity.

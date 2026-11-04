@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Astro Oracle · Your personal sky</title>
-  <link rel="stylesheet" href="style.css?v=20261104-confirm">
+  <link rel="stylesheet" href="style.css?v=20261104-feedback">
 </head>
 <body>
   <header><a class="brand" href="./">✧ ASTRO ORACLE</a><span>YOUR PERSONAL SKY</span></header>
@@ -36,6 +36,7 @@
           <label>Display timezone<input id="timezone" required value="UTC" placeholder="America/New_York"></label></div>
         <p class="help">Tropical geocentric longitudes; ten planets, five major aspects. We collect birthplace details for the upcoming whole-sign chart engine; this version calculates planetary placements only. Ascendant, MC, houses, daily ranking, and AI fortunes are not included yet.</p>
         <button id="calculate" class="primary" type="submit">Calculate my transits <span>↗</span></button>
+        <p id="status" role="status" aria-live="polite"></p>
       </form>
       <details><summary>How the calculation works</summary><p>Natal planetary positions are calculated at your birth instant. The moving planets are scanned hourly for conjunctions, sextiles, squares, trines, and oppositions to those fixed positions, then crossings are refined to approximately one second. Events are selected by UTC month and displayed in your chosen timezone. This is a numerical crossing search, not a certified exhaustive ephemeris: very close station/tangent contacts can be missed. Dates between 1900 and 2100 are supported by this interface.</p></details>
     </section>
@@ -50,7 +51,6 @@
       <div class="result-heading"><h2 id="results-title">Your transit calendar</h2><button id="download" class="secondary" hidden>Download transit ICS</button></div>
       <p id="result-note" class="help"></p><div id="entries"></div>
     </section>
-    <p id="status" role="status" aria-live="polite"></p>
     <dialog id="birth-review" aria-labelledby="birth-review-title">
       <h2 id="birth-review-title">Confirm your birth details</h2>
       <p id="birth-summary"></p>
@@ -59,6 +59,6 @@
     </dialog>
   </main>
   <footer>✧ Astrology as reflection, not a prediction.<br>Calculated with the open-source <a href="https://github.com/cosinekitty/astronomy">Astronomy Engine</a>. AI fortunes and payment access are separate services still to come.</footer>
-  <script src="core.js?v=20261104-confirm"></script><script src="birth.js?v=20261104-confirm"></script><script src="calendar.js?v=20261104-confirm"></script><script src="app.js?v=20261104-confirm"></script>
+  <script src="core.js?v=20261104-feedback"></script><script src="birth.js?v=20261104-feedback"></script><script src="calendar.js?v=20261104-feedback"></script><script src="app.js?v=20261104-feedback"></script>
 </body>
 </html>

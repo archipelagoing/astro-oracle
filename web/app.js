@@ -13,7 +13,7 @@ function render(items,note){
   OracleCalendar.mount($('entries'),items,$('timezone').value.trim()||'UTC');
   $('results').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
 }
-function reset(){if(worker){worker.terminate();worker=null;}$('calculate').disabled=false;exportEvents=[];$('download').hidden=true;$('results').hidden=true;$('natal-preview').hidden=true;}
+function reset(){if(worker){worker.terminate();worker=null;}$('calculate').disabled=false;$('calculate').textContent='Calculate my transits ↗';exportEvents=[];$('download').hidden=true;$('results').hidden=true;$('natal-preview').hidden=true;}
 function invalidateBirth(){reviewedBirth=null;if($('birth-review').open)$('birth-review').close();reset();}
 for(const id of birthFields)$(id).addEventListener('input',invalidateBirth);
 $('birth-choice').addEventListener('change',()=>{$('confirm-birth').disabled=!$('birth-choice').value;});
@@ -103,6 +103,10 @@ $('place-query').addEventListener('keydown',event=>{
 });
 $('place-query').addEventListener('blur',()=>{cancelPlaceSearch();$('place-query').setAttribute('aria-busy','false');});
 $('search-place').addEventListener('click',()=>{clearTimeout(placeTimer);$('place-query').focus();searchPlaces();});
+$('calculate-form').addEventListener('invalid',event=>{
+  const label=event.target.labels?.[0]?.textContent.trim()||'a required field';
+  setStatus(`Check ${label}: ${event.target.validationMessage||'complete this field before calculating.'}`);
+},true);
 $('calculate-form').addEventListener('submit',event=>{
   event.preventDefault();
   if(!reviewedBirth||reviewedBirth.signature!==birthSignature()||!reviewedBirth.confirmed){pendingCalculation=true;reviewBirth();return;}
@@ -114,7 +118,7 @@ function startCalculation(){
   if(!reviewedBirth.candidates.some(c=>c.iso===birth)){setStatus('Choose which occurrence of the repeated birth time applies before continuing.');return;}
   if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)||month<'1900-01'||month>'2100-12'){setStatus('Choose a transit month between 1900 and 2100.');return;}
   let format;try{format=new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'long',timeZone:timezone});}catch{setStatus('Enter a valid timezone, such as America/New_York.');return;}
-  $('calculate').disabled=true;setStatus('Calculating natal placements and scanning your month…');
+  $('calculate').disabled=true;$('calculate').textContent='Calculating…';setStatus('Calculating natal placements and scanning your month. Progress will appear here.');
   worker=new Worker('transits-worker.js');
   worker.onerror=()=>{reset();setStatus('The calculation engine could not load. Check the site files and try again.');};
   worker.onmessage=({data})=>{
@@ -124,10 +128,10 @@ function startCalculation(){
       for(const [body,longitude] of Object.entries(data.natal)){const p=document.createElement('p');p.textContent=`${body} · ${position(longitude)}`;$('natal-placements').append(p);}
       $('natal-preview').hidden=false;return;
     }
-    if(data.progress!==undefined){setStatus('Scanning planetary transits… '+data.progress+'%');return;}
+    if(data.progress!==undefined){$('calculate').textContent=`Calculating… ${data.progress}%`;setStatus('Scanning planetary transits… '+data.progress+'%');return;}
     exportEvents=data.hits.map(h=>({id:`calc-v1-${birth.replace(/[^0-9A-Za-z]/g,'')}-${h.moving}-${h.target}-${h.aspect}-${Math.round(h.at/1000)}`,at:h.at,title:`${h.moving} ${h.aspect} natal ${h.target}`,description:`Transiting ${h.moving}: ${position(h.longitude)}. Natal ${h.target}: ${position(h.natalLongitude)}.\nCalculated tropical geocentric aspect; numerical crossing estimate, not an AI fortune. Exact instant (UTC): ${new Date(h.at).toISOString()}.`}));
     render(exportEvents.map(e=>({...e,when:format.format(new Date(e.at))})),`${exportEvents.length} calculated crossings in ${month} (UTC boundaries), displayed in ${timezone}. Events near month edges may display on a neighboring local date. These are transit candidates, not ranked daily oracle entries.`);
-    $('download').hidden=exportEvents.length===0;$('calculate').disabled=false;worker.terminate();worker=null;setStatus('Calculation complete.');
+    $('download').hidden=exportEvents.length===0;$('calculate').disabled=false;$('calculate').textContent='Calculate my transits ↗';worker.terminate();worker=null;setStatus('Calculation complete.');
   };
   worker.postMessage({birth,month});
 }

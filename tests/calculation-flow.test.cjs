@@ -35,6 +35,9 @@ $('confirm-birth').fire('click');
 assert.equal($('birth-review').open,false);
 assert.equal(workers.length,1,'Confirmation must actually start the worker');
 assert.equal(workers[0].request.birth,'1990-06-15T12:30:00.000Z');
+assert.equal($('calculate').textContent,'Calculating…');
+workers[0].onmessage({data:{progress:40}});
+assert.equal($('calculate').textContent,'Calculating… 40%');
 workers[0].onmessage({data:{hits:[{moving:'Moon',target:'Sun',aspect:'square',at:Date.parse('2026-11-04T12:00:00Z'),longitude:90,natalLongitude:0}]}});
 assert.equal($('results').hidden,false,'Results must become visible');
 const walk=node=>[node,...node.children.flatMap(walk)];
@@ -48,4 +51,6 @@ $('birth-time').value='14:31';$('birth-time').fire('input');$('calculate-form').
 assert.equal($('birth-review').open,true,'Edited data must require fresh confirmation');
 assert.equal(workers.length,1);
 $('cancel-birth').fire('click');assert.equal($('birth-review').open,false);
+$('calculate-form').fire('invalid',{target:{labels:[{textContent:'Exact local birth time'}],validationMessage:'Please fill out this field.'}});
+assert.ok($('status').textContent.includes('Exact local birth time'));
 console.log('Passed application flow: Calculate → confirmation → worker → visible weekly card → flip/back; edits require reconfirmation and cancel starts no worker.');
