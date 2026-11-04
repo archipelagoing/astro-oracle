@@ -11,12 +11,16 @@ AI writing, and PayPal access system are still in development.
 
 ## What works today
 
-- Calculate planetary transits from a birth timestamp without uploading an
-  Astro-Seek calendar.
+- Enter birth date and exact local time, search for a birthplace, and review or
+  correct coordinates and timezone without uploading an Astro-Seek calendar.
+- Confirm the resolved birth instant and calculate natal planetary placements
+  and planetary transits locally.
 - Choose a transit month and display results in a selected timezone.
 - Use a secondary Astro-Seek link, then import an ICS file for local preview.
 - Download calculated transit events as an ICS calendar.
 - Run the static application locally or prepare it for GitHub Pages.
+- Parse raw Astro-Seek transits into structured source records and flag missing
+  natal facts and invalid/conflicting records.
 
 The Astro-Seek option is an external-link and file-import workflow. It does not
 connect an account or automatically synchronize data.
@@ -33,9 +37,12 @@ python3 -m http.server 4173 --directory web
 Open **http://localhost:4173**. Use the server rather than opening the HTML file
 directly so the calculation worker can load correctly.
 
-Enter a birth timestamp with an explicit UTC offset, for example
-`1990-06-15T14:30:00-04:00`. Use the offset that applied at the birthplace on that
-date. The current interface does not determine historical daylight-saving offsets.
+Enter the birth date and exact local clock time. Search for the birthplace or
+enter its name, coordinates, and IANA timezone manually. Select **Check birth time**,
+review the resolved UTC instant, and confirm the details. If the clock repeated
+that time, choose the correct occurrence; nonexistent clock times are rejected.
+Historical conversion uses your browser's timezone database. See the
+[birth-input notes](docs/ASTRO-ORACLE-birth-input.md).
 
 Choose a month and select **Calculate my transits**. Alternatively, use
 **Open Astro-Seek** and **Import .ics** to preview an existing calendar.
@@ -78,8 +85,10 @@ LUNAR is a separate concept and is not required to use the transit calculator.
 
 ## Privacy and protection
 
-Birth timestamps and uploaded ICS files are processed in the browser. The current
-application does not submit them to a backend or persist them. It loads optional
+Birth dates/times and uploaded ICS files are processed in the browser and are not
+submitted to a backend or persisted. City suggestions requested as you type send only the
+city query to Open-Meteo, which supplies suggested place coordinates and timezone.
+Manual place entry avoids that request. The application loads optional
 fonts from Google Fonts; the astronomy engine is included locally.
 
 Readable calendar exports can be copied. Encrypted fortunes and buyer-specific
@@ -91,20 +100,23 @@ code and public repository files.
 
 ```sh
 node tests/transits.test.cjs
+node tests/astroseek.test.cjs
+node tests/birth.test.cjs
 ```
 
 The checks cover sample-file parsing, ICS text round trips and UTF-8 line folding,
-birth-date validation, angular boundary behavior, calculated crossing consistency,
+birth-date validation, historical timezone gaps/folds, place-response validation,
+angular boundary behavior, calculated crossing consistency,
 and a seasonal solar-return sanity case. These do not establish independent
 astronomical accuracy. Real-browser interaction and target-calendar import testing
 remain pending; the browser preview host was unavailable during implementation.
 
 ## GitHub Pages
 
-A manual deployment workflow is included in
+An automatic deployment workflow is included in
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml). It publishes only
-`web/`, with paths suitable for a repository-hosted site. It has not been deployed
-as part of this work.
+`web/`, with paths suitable for a repository-hosted site. Site updates pushed to
+`main` trigger deployment; manual runs are also supported.
 
 Select **GitHub Actions** in the repository's Pages settings, then run
 **Deploy Astro Oracle to GitHub Pages** from Actions after pushing the reviewed

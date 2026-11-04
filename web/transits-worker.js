@@ -6,6 +6,7 @@ self.onmessage=({data})=>{
     const birth=Date.parse(data.birth), start=Date.parse(data.month+'-01T00:00:00Z');
     const endDate=new Date(start);endDate.setUTCMonth(endDate.getUTCMonth()+1);const end=+endDate;
     const natal=Object.fromEntries(bodies.map(b=>[b,longitude(b,birth)]));
+    self.postMessage({natal});
     const hits=[],step=3600000;
     for(let bi=0;bi<bodies.length;bi++){
       const moving=bodies[bi];let before=longitude(moving,start);

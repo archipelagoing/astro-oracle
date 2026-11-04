@@ -35,19 +35,55 @@ facts and may explain their symbolic meaning; it must not supply missing facts.
 
 ## Next steps
 
-1. Verify the browser calculator against an independent ephemeris and in actual
-   browsers; obtain a raw Astro-Seek fixture and matching natal data — sections 1 and 6.
-2. Approve one finished calendar entry and resolve initial scoring, scheduling,
-   and reference-data choices — section 1.
-3. Set up a runnable project and typed data contracts — section 2.
-4. Build and verify parsing, assignment, and calendar export — section 3.
-5. Add AI generation and editorial review after the factual foundation works —
-   section 4.
+1. Enter the reference November birth details in the local form, then implement
+   and independently verify angles/whole-sign houses and source comparison — sections 1 and 3.
+2. Resolve house system, birthplace/timezone lookup, backend hosting, and generation defaults —
+   sections 1 and 4.
+3. Build and verify canonical ranking, assignment, generation, and ICS delivery —
+   sections 3 and 4.
+4. Build the agreed weekly flippable-card interface after generation works — below.
+5. Independently verify astronomical calculations and complete browser QA — section 6.
 
-The supplied finished-calendar sample has been inspected. Raw transit/natal
-fixtures, final formatting, verified
-symbol data, and implementation choices remain open. Proposed answers are a
-starting point, not approval to treat every default as settled.
+Both raw Astro-Seek and finished oracle samples are now present. The owner likes
+the finished format. Birth date/time/place entry and an OpenAI API backend are approved. House system,
+lookup/hosting details, and verified symbol data still require resolution. Raw import and generation take priority over card UI.
+
+## Confirmed onboarding and generation direction
+
+- [x] [Human] Choose birth date, exact time, and birthplace entry as the primary
+  natal-input path; the application calculates placements rather than requiring uploads.
+- [x] [Human] Choose an OpenAI API backend for AI generation, with keys and private
+  ranking settings kept outside the public frontend.
+- [x] [Human] Select whole-sign houses, city search with historical-timezone
+  confirmation/manual correction, and November 2026 as the first reference workflow.
+- [x] [Engineering] Implement birthplace search/manual correction and historical
+  birth-time confirmation, rejecting gaps and requiring an explicit fold choice.
+- [ ] [Human] Verify the birth-details form in actual browsers, including city
+  selection, manual entry, re-confirmation, and ambiguous-time selection.
+- [ ] [Human] Select lookup providers, backend host, model, budget, and retention settings.
+- [x] [Human] Agree to local birth-detail entry, provisional ranking defaults for
+  review, and an owner-supplied/identified Sabian edition.
+- [ ] [Human] Enter the matching November birth details when the form is available
+  and identify the Sabian edition; neither input has been supplied yet.
+- [ ] [Calculation] Choose provisional ranking defaults and produce a clearly labeled
+  November selection for owner review after required natal facts are available.
+
+Progress: These input/provider choices were confirmed by the owner on 2026-11-04.
+Whole-sign houses, confirmed city/timezone lookup, and the November-first
+milestone were also approved. The local birth form is implemented with public city lookup; whole-sign angles,
+AI services, and other backend configuration remain unfinished.
+
+## Confirmed weekly card interface
+
+- [x] [Human] Confirm weekly calendar direction and card content with the owner.
+- [ ] [Engineering] After generation works, build a weekly calendar with day navigation
+  and one flippable card per date; front: date, transit glyph, importance rank;
+  back: fortune and meaning, with expandable astrology details.
+- [ ] [Engineering] Support keyboard/touch flipping, visible focus, reduced-motion
+  preferences, and an accessible responsive layout.
+
+Progress: Owner selected this card content and generation-first build order on
+2026-11-04. Neither the weekly layout nor card interactions are implemented yet.
 
 ## 1. Define the product and resolve inputs
 
@@ -57,7 +93,9 @@ starting point, not approval to treat every default as settled.
 - [ ] [Human] Define the first intended user and their main reason for buying a calendar.
 - [ ] [Human] Obtain a sanitized real Astro-Seek ICS export, including month-edge coverage.
 - [ ] [Human] Obtain a matching sanitized natal-chart fixture and document required fields.
-- [ ] [Human] Approve one complete example entry and a versioned rendering template.
+- [x] [Human] Approve the completed November ICS as the section-order and writing-format reference.
+- [ ] [Engineering] Extract and version that approved rendering template; preserve
+  optional sections and validate factual content separately.
 - [ ] [Human] Approve supported bodies, aspects, zodiac, house system, and timezone rules.
 - [ ] [Human] Approve score tables, overlap rules, date-shift limits, penalties, and ties.
 - [ ] [Human] Approve gap handling and supporting-transit rules.
@@ -95,6 +133,18 @@ and 110 calculated November crossings in the test case. Worker syntax checks and
 whitespace checks passed. Browser preview host unavailable; no deployment or
 independent astronomical comparison performed. See [implementation notes](docs/ASTRO-ORACLE-github-pages.md).
 
+Birth-form progress: On 2026-11-04, timezone/coordinate/place-response tests and a
+live public Berlin geocoding check passed. The form confirms birth instants before
+calculation and displays natal planetary placements. Browser interaction and
+whole-sign angles/houses remain pending. Native Chrome loaded the local page and
+assets successfully, but UI inspection timed out, so click-through/visual QA is
+unverified. No private birth data was used or saved.
+
+Birthplace autofill: On 2026-11-04, added debounced city suggestions with mouse
+and keyboard selection, automatic coordinate/timezone filling, stale-request
+cancellation, and invalidation when a selected city is edited. Birth validation
+checks and JS syntax/whitespace checks pass; real-browser autofill QA is pending.
+
 ## 2. Set up the foundation
 
 - [ ] [Engineering] Select and pin the runtime and dependencies; document a reproducible setup.
@@ -109,12 +159,16 @@ The canonical backend data models, Python runtime, and AI provider remain unbuil
 
 ## 3. Build the deterministic calendar foundation
 
-- [ ] [Engineering] Parse real ICS events; preserve source identity, timestamps, and original records.
+- [x] [Engineering] Parse raw Astro-Seek ICS into structured transits, preserving
+  source identity, UTC timestamps, positions, source house values, and descriptions.
+- [ ] [Engineering] Normalize imported and calculated candidates into the shared
+  backend schema and enrich/verify them with the locally entered natal chart.
 - [ ] [Calculation] Specify longitude normalization, minimal angular distance,
   aspect residuals, and house formulas, including precision-derived tolerances.
 - [ ] [Engineering] Validate supported fields and timezone conversion; distinguish
   internal geometric consistency from independent ephemeris verification.
-- [ ] [Engineering] Handle duplicate UIDs, conflicting records, and missing data explicitly.
+- [x] [Engineering] Collapse identical raw-source UIDs, quarantine conflicting UIDs,
+  and report missing natal facts, invalid timestamps/positions, and unsupported events.
 - [ ] [Calculation] Calculate houses using the approved chart inputs and house system.
 - [ ] [Calculation] Implement normalized score features, approved weights, overlap
   rules, and deterministic ties; reject unsupported or out-of-range inputs.
@@ -134,8 +188,11 @@ The canonical backend data models, Python runtime, and AI provider remain unbuil
   times, transparent availability, and generation/version metadata.
 - [ ] [Engineering] Save scored-transit, schedule, and final-entry JSON for inspection.
 
-Progress: These capabilities are specified in
-[calendar rules](docs/ASTRO-ORACLE-calendar-rules.md); none is implemented.
+Progress: On 2026-11-04, `node tests/astroseek.test.cjs` passed for all 146 raw
+source events plus malformed/conflicting-record cases. The browser import now shows
+structured source facts and missing natal information. Scoring, assignment,
+canonical rendering, symbol enrichment, and generation remain unimplemented.
+Browser interaction and independent ephemeris validation remain pending.
 
 ## 4. Add AI writing and editorial review
 
@@ -291,9 +348,9 @@ initial sandbox prototype.
 - **Database proposal:** Evaluate PostgreSQL from the new application proposal;
   the earlier SQLite suggestion is an alternative, not an adopted stack.
 
-- **Input dependency:** A finished November oracle ICS is available. A raw
-  Astro-Seek source export and matching sanitized natal fixture remain absent;
-  do not infer the raw parser format from the finished calendar.
+- **Input dependency:** Both November ICS files are available. Full natal-chart
+  information is still needed for facts the raw export omits. Treat both source
+  files as potentially personal data rather than automatically public fixtures.
 - **Content dependency:** Final formatting and a distributable verified Sabian table
   remain unresolved.
 - **Open decisions:** Proposed stack, scoring defaults, model, pricing, and operating

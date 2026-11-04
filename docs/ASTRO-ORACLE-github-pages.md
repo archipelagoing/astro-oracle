@@ -8,10 +8,15 @@ Engine. The secondary Astro-Seek path opens its website and lets the user import
 an ICS. This is not a private API integration, account connection, or automatic sync.
 Do not send birth details to Astro-Seek automatically.
 
-Inputs are an explicit birth timestamp with UTC offset, transit month, and display
-timezone. The user must determine their historical birth offset. Birthplace,
-Ascendant, MC, and houses are not calculated in this version. No birth details or
-uploaded calendars are sent to a backend or stored persistently by this app.
+Inputs are birth date, exact local time, and birthplace, plus transit month and
+result-display timezone. City search uses Open-Meteo/GeoNames; users select a
+result and confirm or manually correct coordinates and timezone. Historical local
+time is resolved using the browser's timezone database, with explicit handling of
+ambiguous/nonexistent times. Only the city query leaves the browser during search;
+birth date/time and calendars are not sent or persisted. See [birth onboarding](ASTRO-ORACLE-birth-input.md).
+Ascendant, MC, and houses are not calculated in this version. Coordinates are
+collected for the upcoming whole-sign engine; natal planetary placements are
+already calculated at the confirmed UTC instant and displayed before the scan.
 
 The engine calculates tropical, geocentric ecliptic longitudes of date, using
 light-time correction and aberration. Ten moving bodies are compared against ten
@@ -73,7 +78,7 @@ preview host was unavailable during implementation.
 
 ## Deploy to GitHub Pages
 
-The manual `.github/workflows/pages.yml` uploads only `web/`, so assets resolve
+The `.github/workflows/pages.yml` uploads only `web/`, so assets resolve
 under either a repository subpath or a custom domain. No build or external runtime
 dependency installation is required.
 
@@ -82,7 +87,8 @@ dependency installation is required.
 3. Run “Deploy Astro Oracle to GitHub Pages” from the Actions tab.
 4. Check the returned deployment URL, calculation worker, import, and ICS download.
 
-No push or deployment has been performed by this change. Private birth details must
+Site changes pushed to `main` trigger deployment; manual runs are also supported.
+Private birth details must
 not be committed to a public repository; leaving the sample out of the Pages
 artifact does not make its repository copy private.
 

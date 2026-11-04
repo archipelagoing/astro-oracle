@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Astro Oracle · Your personal sky</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261104-autofill">
 </head>
 <body>
   <header><a class="brand" href="./">✧ ASTRO ORACLE</a><span>YOUR PERSONAL SKY</span></header>
@@ -11,18 +11,35 @@
     <section class="intro"><p class="eyebrow">A LITTLE PERSPECTIVE FROM THE COSMOS</p>
       <h1>Your chart.<br>Your changing sky.</h1>
       <p class="lead">Discover when the planets form aspects to your natal placements. Calculate here, or bring a calendar you already have.</p>
-      <p class="privacy">✧ Birth details and uploaded calendars stay in this browser. Nothing is submitted to a server.</p>
+      <p class="privacy">✧ Your birth date, time, and calendars stay in this browser. City search sends only your search text to Open-Meteo; manual place entry works offline.</p>
     </section>
     <section class="panel" aria-labelledby="calculate-title">
       <div class="section-heading"><span class="step">01</span><div><p class="eyebrow">START WITH YOUR STARS</p><h2 id="calculate-title">Calculate my transits</h2></div></div>
       <form id="calculate-form">
-        <label>Birth date and time, including UTC offset
-          <input id="birth" required type="text" placeholder="1990-06-15T14:30:00-04:00" aria-describedby="birth-help">
-        </label>
-        <p class="help" id="birth-help">Use YYYY-MM-DDTHH:MM:SS±HH:MM. Enter the offset that applied at your birthplace on your birth date, or use Z for UTC. The calculator does not guess historical daylight saving time.</p>
+        <div class="fields"><label>Birth date<input id="birth-date" required type="date" min="1900-01-01" max="2100-12-31" autocomplete="bday"></label>
+          <label>Exact local birth time<input id="birth-time" required type="time" step="1" aria-describedby="birth-help"></label></div>
+        <p class="help" id="birth-help">Use the clock time recorded at your birthplace. We apply the selected timezone's historical rules and ask you to confirm the result. If you do not know your exact time, do not substitute an invented one.</p>
+        <div class="place-autocomplete"><label>Birthplace city<input id="place-query" type="search" placeholder="Start typing a city…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="place-suggestions" aria-describedby="place-help" aria-busy="false"></label>
+          <ul id="place-suggestions" role="listbox" aria-label="Birthplace suggestions" hidden></ul></div>
+        <div class="actions place-actions"><button id="search-place" type="button" class="secondary">Search cities</button></div>
+        <p class="help" id="place-help">Suggestions appear after three characters. Selecting a city fills its coordinates and timezone. Search uses <a href="https://open-meteo.com/en/docs/geocoding-api" target="_blank" rel="noopener noreferrer">Open-Meteo / GeoNames</a>. Only the city query is sent. You can skip search and enter all fields below manually.</p>
+        <p id="place-status" role="status" aria-live="polite"></p>
+        <fieldset id="birth-details"><legend>Review or correct birthplace details</legend>
+          <label>Place name<input id="place-name" required placeholder="City, region, country" autocomplete="off"></label>
+          <div class="fields"><label>Latitude (north positive)<input id="latitude" required type="number" min="-90" max="90" step="any" inputmode="decimal"></label>
+            <label>Longitude (east positive)<input id="longitude" required type="number" min="-180" max="180" step="any" inputmode="decimal"></label></div>
+          <label>Birthplace timezone<input id="birth-timezone" required placeholder="America/New_York" autocomplete="off"></label>
+          <p class="help">Confirm the zone applies to this birthplace and birth date. Changing coordinates manually does not automatically change the timezone. Historical rules depend on your browser's timezone database.</p>
+        </fieldset>
+        <button id="review-birth" type="button" class="secondary">Check birth time</button>
+        <div id="birth-review" hidden>
+          <p id="birth-summary" class="help"></p>
+          <label id="birth-choice-label">Birth instant<select id="birth-choice"></select></label>
+          <label class="check-label"><input id="birth-confirmed" type="checkbox"> I confirm the birthplace, coordinates, timezone, and birth instant above.</label>
+        </div>
         <div class="fields"><label>Transit month (UTC)<input id="month" type="month" required min="1900-01" max="2100-12"></label>
           <label>Display timezone<input id="timezone" required value="UTC" placeholder="America/New_York"></label></div>
-        <p class="help">Tropical geocentric longitudes; ten planets, five major aspects. Birthplace is not needed for this planetary-only calculation. Ascendant, MC, houses, daily ranking, and AI fortunes are not included yet.</p>
+        <p class="help">Tropical geocentric longitudes; ten planets, five major aspects. We collect birthplace details for the upcoming whole-sign chart engine; this version calculates planetary placements only. Ascendant, MC, houses, daily ranking, and AI fortunes are not included yet.</p>
         <button id="calculate" class="primary" type="submit">Calculate my transits <span>↗</span></button>
       </form>
       <details><summary>How the calculation works</summary><p>Natal planetary positions are calculated at your birth instant. The moving planets are scanned hourly for conjunctions, sextiles, squares, trines, and oppositions to those fixed positions, then crossings are refined to approximately one second. Events are selected by UTC month and displayed in your chosen timezone. This is a numerical crossing search, not a certified exhaustive ephemeris: very close station/tangent contacts can be missed. Dates between 1900 and 2100 are supported by this interface.</p></details>
@@ -33,6 +50,7 @@
       <div class="actions"><a class="secondary" href="https://www.astro-seek.com/" target="_blank" rel="noopener noreferrer">Open Astro-Seek ↗</a><label class="secondary upload">Import .ics<input id="import" type="file" accept=".ics,text/calendar"></label></div>
       <p class="help">This is an external link and file-import workflow, not an account connection or automatic sync. Imported text is displayed as supplied, without astronomical verification.</p>
     </section>
+    <section id="natal-preview" class="panel" aria-labelledby="natal-title" hidden><h2 id="natal-title">Your natal planetary placements</h2><p class="help">Calculated at the confirmed birth instant. House and angle calculations are still to come.</p><div id="natal-placements" class="natal-grid"></div></section>
     <section id="results" class="panel" aria-labelledby="results-title" hidden>
       <div class="result-heading"><h2 id="results-title">Your transit calendar</h2><button id="download" class="secondary" hidden>Download transit ICS</button></div>
       <p id="result-note" class="help"></p><div id="entries"></div>
@@ -40,6 +58,6 @@
     <p id="status" role="status" aria-live="polite"></p>
   </main>
   <footer>✧ Astrology as reflection, not a prediction.<br>Calculated with the open-source <a href="https://github.com/cosinekitty/astronomy">Astronomy Engine</a>. AI fortunes and payment access are separate services still to come.</footer>
-  <script src="core.js"></script><script src="app.js"></script>
+  <script src="core.js?v=20261104-autofill"></script><script src="birth.js?v=20261104-autofill"></script><script src="app.js?v=20261104-autofill"></script>
 </body>
 </html>
