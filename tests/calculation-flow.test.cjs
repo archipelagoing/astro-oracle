@@ -24,7 +24,7 @@ document={getElementById:id=>{assert.ok(elements.has(id),`Missing HTML element $
 const workers=[];
 class Worker{constructor(){workers.push(this);}postMessage(data){this.request=data;}terminate(){this.terminated=true;}}
 const context=vm.createContext({document,Worker,Date,Intl,Math,console,TextEncoder,URL,URLSearchParams,AbortController,setTimeout,clearTimeout,matchMedia:()=>({matches:true})});
-for(const file of ['core.js','birth.js','calendar.js','app.js'])vm.runInContext(fs.readFileSync('web/'+file,'utf8'),context,{filename:file});
+for(const file of ['core.js','birth.js','symbols.js','calendar.js','app.js'])vm.runInContext(fs.readFileSync('web/'+file,'utf8'),context,{filename:file});
 const $=id=>elements.get(id);
 for(const [id,value] of Object.entries({'birth-date':'1990-06-15','birth-time':'14:30','place-name':'Berlin, Germany',latitude:'52.52',longitude:'13.41','birth-timezone':'Europe/Berlin',month:'2026-11',timezone:'UTC'}))$(id).value=value;
 $('calculate-form').fire('submit');

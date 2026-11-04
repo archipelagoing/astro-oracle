@@ -394,3 +394,10 @@ Birthplace simplification — 2026-11-04: At the owner's request, removed the
 visible birthplace name/coordinate/timezone correction panel. Selected city data
 is retained internally for calculation and confirmation; manual entry instructions
 were removed from the interface.
+
+Symbol presentation — 2026-11-04: Added safe text-based symbol decoration across
+card fronts/backs, fortunes/meanings, summaries, expanded source descriptions, and
+natal placements. Covers planets, 12 signs, major aspects, angles, nodes, and
+Chiron. Names stay readable; source records and exported content are unchanged.
+Mapping/word-boundary checks, existing application/calendar tests, and 4.5:1
+contrast checks on light-card/dark-panel backgrounds passed.

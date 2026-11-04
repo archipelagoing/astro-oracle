@@ -31,7 +31,7 @@
   }
   function mount(container,items,timezone){
     container.replaceChildren();const calendar=group(items,timezone);
-    const el=(tag,text,className)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;};
+    const el=(tag,text,className)=>{const e=document.createElement(tag);if(text!==undefined)OracleSymbols.write(e,text);if(className)e.className=className;return e;};
     if(calendar.first){
       const current=monday(dayKey({at:Date.now()},timezone));
       let week=current>=calendar.first&&current<=calendar.last?current:calendar.first;

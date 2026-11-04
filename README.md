@@ -18,6 +18,8 @@ AI writing, and PayPal access system are still in development.
 - Choose a transit month and display results in a selected timezone.
 - Use a secondary Astro-Seek link, then import an ICS file for local preview.
 - View calculated or imported events in a weekly calendar with flippable daily cards.
+- See colored planet, zodiac, aspect, and chart-angle symbols beside their names
+  in cards, details, and natal placements.
 - Reveal fortune and meaning from completed oracle imports, with expandable details.
 - Download calculated transit events as an ICS calendar.
 - Run the static application locally or prepare it for GitHub Pages.

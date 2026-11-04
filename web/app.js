@@ -125,7 +125,7 @@ function startCalculation(){
     if(data.error){reset();setStatus('Calculation failed: '+data.error);return;}
     if(data.natal&&!data.hits){
       $('natal-placements').replaceChildren();
-      for(const [body,longitude] of Object.entries(data.natal)){const p=document.createElement('p');p.textContent=`${body} · ${position(longitude)}`;$('natal-placements').append(p);}
+      for(const [body,longitude] of Object.entries(data.natal)){const p=document.createElement('p');OracleSymbols.write(p,`${body} · ${position(longitude)}`);$('natal-placements').append(p);}
       $('natal-preview').hidden=false;return;
     }
     if(data.progress!==undefined){$('calculate').textContent=`Calculating… ${data.progress}%`;setStatus('Scanning planetary transits… '+data.progress+'%');return;}
