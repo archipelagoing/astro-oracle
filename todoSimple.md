@@ -401,3 +401,7 @@ natal placements. Covers planets, 12 signs, major aspects, angles, nodes, and
 Chiron. Names stay readable; source records and exported content are unchanged.
 Mapping/word-boundary checks, existing application/calendar tests, and 4.5:1
 contrast checks on light-card/dark-panel backgrounds passed.
+
+Compact form — 2026-11-04: Reduced form spacing, placed city search inline,
+shortened helper copy, grouped review/calculate actions, and moved detailed
+limitations into a disclosure. Kept all calculation inputs and confirmation logic.
