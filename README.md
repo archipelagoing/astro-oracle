@@ -1,109 +1,133 @@
-# Astro Oracle
+# ✧ Astro Oracle
 
-A personalized astrology calendar concept for the PayPal AI hackathon. The proposed system turns transit data and a natal chart into daily interpretations, rhyming fortunes, and an importable calendar. This repository contains planning documents and an initial browser-based transit calculator. The full oracle-generation and commerce pipeline is not yet implemented.
+Astro Oracle is a personalized astrology calendar project that turns the changing
+sky into a daily moment of reflection. The planned experience combines natal
+context, curated transits, concise interpretations, and poetic fortunes in a
+calendar you can use alongside everyday life.
 
-LUNAR is a separate companion concept whose relationship to calendar purchases remains undecided.
+The repository currently includes a working browser-based planetary transit
+calculator and ICS preview/export tools. The full oracle-generation pipeline,
+AI writing, and PayPal access system are still in development.
 
-### Browser transit calculator
+## What works today
 
-Run `python3 -m http.server 4173 --directory web` and open
-`http://localhost:4173`. Calculate planetary transits from a birth timestamp, or
-use the secondary Astro-Seek link and ICS import. Calculations run locally in a
-Web Worker; this version does not generate AI fortunes or calculate houses.
+- Calculate planetary transits from a birth timestamp without uploading an
+  Astro-Seek calendar.
+- Choose a transit month and display results in a selected timezone.
+- Use a secondary Astro-Seek link, then import an ICS file for local preview.
+- Download calculated transit events as an ICS calendar.
+- Run the static application locally or prepare it for GitHub Pages.
 
-Run checks with `node tests/transits.test.cjs`. A manual GitHub Pages workflow is
-included; it has not been deployed. See [setup, calculation scope, and hosting
-limits](docs/ASTRO-ORACLE-github-pages.md).
+The Astro-Seek option is an external-link and file-import workflow. It does not
+connect an account or automatically synchronize data.
 
-### Project planning documents
+## Try it locally
 
-- [Expanded application architecture](docs/ASTRO-ORACLE-application-architecture-source.md)
-- [Application decisions and reconciliation](docs/ASTRO-ORACLE-application-decisions.md)
+Requirements: Python 3 for the local web server; Node.js for the verification script.
+No package installation or API key is needed for the current calculator.
 
-- [Astro Oracle architecture proposal](docs/ASTRO-ORACLE-architecture-source.md)
-- [Calendar rules](docs/ASTRO-ORACLE-calendar-rules.md)
-- [Implementation questions](docs/ASTRO-ORACLE-implementation-questions.md)
-- [Proposed answers and implementation defaults](docs/ASTRO-ORACLE-proposed-answers.md)
-- [LUNAR token rules](docs/LUNAR-rules.md)
+```sh
+python3 -m http.server 4173 --directory web
+```
 
-#### About the challenge
+Open **http://localhost:4173**. Use the server rather than opening the HTML file
+directly so the calculation worker can load correctly.
 
-PayPal already moves money for millions of people and businesses, every day, all over the world. This hackathon is us opening that platform up and asking what happens when you put AI behind the wheel. New agents, new ways to pay and get paid, tools nobody's built yet. We want to see what you make of it.
+Enter a birth timestamp with an explicit UTC offset, for example
+`1990-06-15T14:30:00-04:00`. Use the offset that applied at the birthplace on that
+date. The current interface does not determine historical daylight-saving offsets.
 
-AI is changing how people build, buy, sell, work, connect, and move money. Now it's your turn to imagine what comes next.
+Choose a month and select **Calculate my transits**. Alternatively, use
+**Open Astro-Seek** and **Import .ics** to preview an existing calendar.
 
-**Build What's Next with PayPal and AI** is a global online hackathon inviting developers, designers, founders, students, and builders to create something new using **PayPal and AI**.
+## Current scope and limitations
 
-There are no prescribed problem statements and no set of tracks. Build an agent, an app, an automation, a new payment experience, a business tool, a social product, or something we haven't thought of yet.
+The calculator supports planetary aspects using tropical, geocentric positions.
+Transit months use UTC boundaries; results are displayed in the selected timezone.
+An event near a month boundary can therefore display on a neighboring local date.
 
-The only fundamental requirement: **your project must meaningfully use both PayPal and AI**.
+Current exports contain timed transit candidates. They are not the finished,
+ranked, all-day oracle calendar. Ascendant, MC, houses, Sabian enrichment, lucky
+numbers, weekly favorites, and AI fortunes are not implemented in the application.
+The crossing search has numerical limitations near planetary stations and has
+not yet been compared with an independent reference ephemeris.
 
-##### **Why Join?**
+The supplied November 2026 ICS is a finished-calendar format reference. Its
+presence does not mean the application generated it or that its astronomical
+claims have been independently verified. Imported calendars are displayed as
+supplied, not certified as accurate.
 
-- **Build something ambitious** — Turn an idea into a working project using PayPal and AI.
-- **Explore what’s next** — Experiment with new ways people, businesses, and AI agents can interact with money and payments.
-- **Win part of $69,750 in total prizes** — Compete for overall prizes and special awards across creativity, impact, execution, and more.
-- **Show what you can build** — Put your project in front of PayPal judges, developers, and the wider hackathon community.
-- **Learn by building** — Explore PayPal APIs, AI tools, agents, automations, and emerging development workflows.
-- **Build your way** — Join individually or as a team, and start something new or meaningfully advance an existing project.
+## The planned oracle experience
 
-##### Get started
+Astro Oracle will organize selected transits into a personalized daily calendar,
+then add practical interpretations, two-line rhyming fortunes, and symbolic details.
+A review stage will check factual consistency, completeness, and writing quality
+before entries are delivered.
 
-- Get a [PayPal Developer](https://developer.paypal.com/?utm_source=Devpost&utm_medium=LP&utm_campaign=PayPalAIHackathon) account (5 minutes)
-- [Review example projects](https://paypalaihackathon.devpost.com/resources) and brainstorm your own (30 minutes)
+The design separates astronomical source facts from creative interpretation and
+keeps approved calendar content independent of purchases. This overview omits
+selection formulas, weights, and tuning parameters. The ranking and scheduling
+engine itself is not implemented yet.
 
-##### Webinars
+For the PayPal AI hackathon, the proposed commerce experience includes a free
+preview and one-time purchases that unlock date ranges through verified PayPal
+sandbox payments. Checkout, entitlements, and AI model integration are planned;
+the current site does not accept payments or claim to be a complete submission.
 
-- [Oct 6th 9am PT - 9:45am PT ~ Start building with PayPal](https://us02web.zoom.us/webinar/register/9017891382824/WN_uifdBF0pTfe8E0jm3lLayw)
-- [Oct 7th 9am PT - 9:30am PT ~ Power Your PayPal Hackathon Project with APIMatic Context Plugins](https://events.teams.microsoft.com/event/9bd9c158-55c9-4d7f-81b4-d419a327f1df@fb007914-6020-4374-977e-21bac5f3f4c8?source=copyLinkLegacyShareLinkDialog)
-- [Oct 12th 7am PT - 7:45am PT ~ Build a payments dashboard without building a dashboard](https://events.teams.microsoft.com/event/4f91e1d9-eb30-42b9-ac36-e6b0eaefc4ae@fb007914-6020-4374-977e-21bac5f3f4c8)
-- [Oct 13th 1am PT - 2am PT ~ Start building with PayPal](https://events.teams.microsoft.com/event/bad9d43c-0044-41ef-afaf-cbb1fddaef4f@fb007914-6020-4374-977e-21bac5f3f4c8?source=copyLinkLegacyShareLinkDialog)
+LUNAR is a separate concept and is not required to use the transit calculator.
 
-### **Requirements**
+## Privacy and protection
 
-#### What to Build
+Birth timestamps and uploaded ICS files are processed in the browser. The current
+application does not submit them to a backend or persist them. It loads optional
+fonts from Google Fonts; the astronomy engine is included locally.
 
-Build or update an application that integrates the [PayPal developer platform](https://developer.paypal.com/?utm_source=Devpost&utm_medium=LP&utm_campaign=PayPalAIHackathon) (using the free sandbox environment) along with an AI tool, model, or platform of your choice.
+Readable calendar exports can be copied. Encrypted fortunes and buyer-specific
+metadata are design proposals, not implemented copy protection. Any future private
+ranking configuration or decryption key must stay outside downloadable browser
+code and public repository files.
 
-**You may also use one of our sponsors' tools:**
+## Verification
 
-- [AG Grid](https://paypalaihackathon.devpost.com/details/aggrid)
-- [APIMatic](https://paypalaihackathon.devpost.com/details/apimatic)
-- [Astropods](https://paypalaihackathon.devpost.com/details/astropods)
-- [Bryntum](https://paypalaihackathon.devpost.com/details/bryntum)
-- [Channel3](https://paypalaihackathon.devpost.com/details/channel3)
-- [Elastic](https://paypalaihackathon.devpost.com/details/elastic)
-- [KERNEL](https://paypalaihackathon.devpost.com/details/kernel)
-- [Postman](https://paypalaihackathon.devpost.com/details/postman)
-- [Render](https://paypalaihackathon.devpost.com/details/render)
-- [Zapier](https://paypalaihackathon.devpost.com/details/zapier)
+```sh
+node tests/transits.test.cjs
+```
 
-***Note:*** PayPal will provide access to select AI sponsor tools that you are welcome to use, though using one of these partner tools is not required. Any AI tool works, as long as PayPal integration is central to the project.
+The checks cover sample-file parsing, ICS text round trips and UTF-8 line folding,
+birth-date validation, angular boundary behavior, calculated crossing consistency,
+and a seasonal solar-return sanity case. These do not establish independent
+astronomical accuracy. Real-browser interaction and target-calendar import testing
+remain pending; the browser preview host was unavailable during implementation.
 
-**Your project should:**
+## GitHub Pages
 
-- Meaningfully integrate at least one PayPal technology, API, SDK, product, or developer capability
-- Meaningfully incorporate AI into the experience or functionality
-- Demonstrate a working prototype or proof of concept
-- Be sufficiently documented for the judges to understand and evaluate it
-- Comply with the Official Rules
+A manual deployment workflow is included in
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml). It publishes only
+`web/`, with paths suitable for a repository-hosted site. It has not been deployed
+as part of this work.
 
-Projects can be built individually or as a team. They can be new or existing projects, as long as you make meaningful progress on the project during the course of the hackathon.
+Select **GitHub Actions** in the repository's Pages settings, then run
+**Deploy Astro Oracle to GitHub Pages** from Actions after pushing the reviewed
+source. See the [setup and hosting notes](docs/ASTRO-ORACLE-github-pages.md).
 
-#### What to Submit
+Pages serves the free static calculator/project demonstration. AI credentials,
+private configuration, paid access, and payment verification require separate
+infrastructure. GitHub restricts Pages use for commercial transaction sites and
+commercial SaaS; see [GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
 
-- **Project** - built with the required developer tools and meeting the Project Requirements above.
-- **Text description** - explain your project's features and functionality.
-- **Functional demo** - judges must be able to actually run or interact with a working build. Satisfy this with either:
-  - Clear, complete setup and run instructions in your code repository, so judges can build and run it themselves, or
-  - A hosted demo URL.
-  - A design mockup, static prototype, or non-functional demo does not meet this requirement.
-- **Tools** - identify which tools were used and explain how the tools were used in your project.
-- **Public code repository on GitHub**
-  - Must contain all source code, assets, and instructions needed to run the project.
-  - Must be public and open source, with a license file visible at the top of the repo (in the About section).
-- **Demo video**
-  - Under 3 minutes (judges aren't required to watch past that).
-  - Must show the project functioning on the device it was built for.
-  - Must be uploaded to YouTube, publicly visible, with the link on the submission form.
-  - Must not include third-party trademarks or copyrighted music/material without permission.
+## Project structure
+
+- `web/` — static interface, local astronomy engine, calculation worker, and ICS tools.
+- `tests/` — deterministic calculator and calendar-format checks.
+- `docs/` — architecture proposals, requirements, and unresolved design decisions.
+- `todoSimple.md` — implementation checklist and current verification status.
+- `november_2026_oracle_final_revised.ics` — supplied output-format reference.
+
+## License and acknowledgments
+
+Repository licensing is described in [LICENSE](LICENSE). The bundled
+[Astronomy Engine](https://github.com/cosinekitty/astronomy) by Don Cross has its
+own [MIT license](web/vendor/ASTRONOMY-LICENSE.txt).
+
+Astro Oracle uses astrology as a reflective practice, not a guarantee of future
+outcomes. It is not affiliated with Astro-Seek or endorsed by PayPal.

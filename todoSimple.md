@@ -251,8 +251,8 @@ unexecuted.
 
 ## 7. Prepare the hackathon submission
 
-- [ ] [Human] Replace generic hackathon-heavy README content with product description,
-  features, architecture overview, setup, and usage instructions.
+- [x] [Human] Replace generic hackathon-heavy README content with accurate product
+  status, high-level architecture, setup, usage, and limitations; omit ranking math.
 - [ ] [Human] Provide a working demo through reproducible local instructions or a hosted URL.
 - [ ] [Human] Confirm the public repository contains required source, permitted assets,
   dependencies, and accurate license information.
@@ -262,9 +262,12 @@ unexecuted.
 - [ ] [Human] Recheck current official submission requirements before submission.
 - [ ] [Human] Complete submission when authorized and verify its links and access.
 
-Progress: README currently includes hackathon requirements. No runnable demo,
-video, or submission has been verified. Publishing and submission remain separate
-authorized actions.
+Progress: On 2026-11-04, replaced generic hackathon copy with an accurate README
+for the implemented calculator and planned oracle service, without ranking formulas
+or parameter values. Detailed source documents still contain proposed formulas;
+README editing alone does not conceal those files or Git history. Local HTTP and
+automated calculator checks passed previously; no hosted demo, video, or submission
+has been verified. Publishing and submission remain separate authorized actions.
 
 ## Future priorities
 
