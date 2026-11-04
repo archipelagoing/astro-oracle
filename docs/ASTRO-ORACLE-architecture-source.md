@@ -2,6 +2,8 @@
 
 Preserved as supplied. Design prose and pseudocode, not executable implementation. Exact owner-approved entry formatting remains pending.
 
+Companion planning documents: [implementation questions](ASTRO-ORACLE-implementation-questions.md) and [proposed answers](ASTRO-ORACLE-proposed-answers.md). The original proposal below is preserved; companion defaults are not approved requirements.
+
 ```text
 ✧ Astro Oracle — Five-Agent Architecture
 

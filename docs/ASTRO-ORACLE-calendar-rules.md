@@ -2,6 +2,8 @@
 
 Status: proposed specification. Exact final formatting awaits an owner-supplied example.
 
+Implementation planning: [open questions](ASTRO-ORACLE-implementation-questions.md) and [proposed answers and defaults](ASTRO-ORACLE-proposed-answers.md). These supplements do not establish owner approval for new choices.
+
 ## Inputs and output
 
 Inputs: Astro-Seek ICS, natal chart, target month, timezone, house and zodiac systems, and preferences. Inspect an actual export before assuming fields exist.

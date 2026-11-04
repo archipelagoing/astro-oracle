@@ -1,4 +1,17 @@
-# BARTR: PayPal AI Hackathon ft archipelagoing. Trade what you want!
+# Astro Oracle
+
+A personalized astrology calendar concept for the PayPal AI hackathon. The proposed system turns transit data and a natal chart into daily interpretations, rhyming fortunes, and an importable calendar. This repository currently contains planning documents and specifications; implementation has not started.
+
+LUNAR is a separate companion concept whose relationship to calendar purchases remains undecided.
+
+### Project planning documents
+
+- [Astro Oracle architecture proposal](docs/ASTRO-ORACLE-architecture-source.md)
+- [Calendar rules](docs/ASTRO-ORACLE-calendar-rules.md)
+- [Implementation questions](docs/ASTRO-ORACLE-implementation-questions.md)
+- [Proposed answers and implementation defaults](docs/ASTRO-ORACLE-proposed-answers.md)
+- [LUNAR token rules](docs/LUNAR-rules.md)
+
 #### About the challenge
 
 PayPal already moves money for millions of people and businesses, every day, all over the world. This hackathon is us opening that platform up and asking what happens when you put AI behind the wheel. New agents, new ways to pay and get paid, tools nobody's built yet. We want to see what you make of it.
